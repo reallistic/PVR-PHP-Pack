@@ -44,7 +44,7 @@ class INDEXSITE{
 	
 	function makeSearch($q){
 		$cats = implode(', ', $this->category);
-		return $this->url."?apikey=".$this->apikey."cat=".$cats."&t=search&q=".$q;
+		return $this->url."?apikey=".$this->apikey."cat=".$cats."&extended=1"."&t=search&q=".$q;
 	}
 	
 	function saveSite(){
@@ -60,6 +60,14 @@ class INDEXSITE{
 		
 		fclose($fp);
 	}
+	
+	/*$resp = "";
+	$endpt = "https://smackdownonyou.com/api";
+	$data = "apikey=24473a123ea69a43cbdc55320d302847".
+				//"&extended=1".
+				"&t=music".
+				"&cat=3010".$art.$alb;
+	$endpt .="?".$data;*/
 }
 
 class AUTH{
@@ -140,8 +148,46 @@ class AUTH{
 }
 
 class SEARCHRESULT{
-	public $link;
-	public $tilte;
+	private $link;
+	private $title;
+	private $grabs;
+	
+	function SEARCHRESULT(){
+		$this->grabs=0;
+	}
+	
+	function SEARCHRESULT($l, $t){
+		$this->grabs=0;
+		$this->link=$l;
+		$this->title=$t;
+	}
+	
+	function SEARCHRESULT($l, $t, $g){
+		$this->grabs=intval($g);
+		$this->link=$l;
+		$this->title=$t;
+	}
+	
+	function setLink($l){
+		$this->link=$l;
+	}
+	function setTitle($t){
+		$this->title=$t;
+	}
+	function setGrabs($g){
+		$this->grabs=intval($g);
+	}
+	
+	function getTitle(){
+		return $this->title;
+	}
+	
+	function getLink(){
+		return $this->link;
+	}
+	function getGrabs(){
+		return $this->grabs;
+	}
 	
 }
 
