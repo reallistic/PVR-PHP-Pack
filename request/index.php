@@ -5,27 +5,24 @@ $indexers = false;
 $indexersprop = false;
 $config = false;
 $query = false;
-if(is_file("conf/config.php")){
+if(is_file("../conf/config.php")){
 	$config = true;
-	require("conf/config.php");
+	require("../conf/config.php");
 	
 	if(isset($_REQUEST['q']) && $_REQUEST['q'] != ""){
 		$_SESSION['q']=$_REQUEST['q'];
-		header("location: /request/");
+		//header("location: /request/");
 	}
 	elseif(isset($_SESSION['q'])){
 		$query = true;
 		$q = escape_query($_SESSION['q']);
 		
 		unset($_SESSION['q']);
-		session_destroy();		
-		if($q!=""){
-			$art = "&artist=".$art;
-		}
-		if(is_file("conf/indexsites.db")){
+		session_destroy();
+		if(is_file("../conf/indexsites.db")){
 			$indexers = true; //check for indexers was good
 			
-			$inxs = file_get_contents("conf/indexsites.db");
+			$inxs = file_get_contents("../conf/indexsites.db");
 			$inxs = explode("\r\n",$inx);
 			$indexsites=array();
 			$resp ="";
@@ -44,7 +41,7 @@ if(is_file("conf/config.php")){
 				}
 				$indexsite = NULL;
 			endforeach;
-			if(indexersprop === true){
+			if($indexersprop === true){
 				for( $i=0; $i<count($indexsites); $i++){
 					$indexsite = $indexsites[$i];
 					$ch = curl_init($indexsite->makeSearch($q));
@@ -55,7 +52,7 @@ if(is_file("conf/config.php")){
 					
 					$xml = simplexml_load_string($resp);
 					if(isset($resp) && count($xml->channel->item) !== 0){
-					   foreach ($xml->channel->item as $item):\
+					   foreach ($xml->channel->item as $item):
 							if(!in_array($item->title, $filter)){
 								$sr = new SEARCHRESULT($item->link,$item->title);
 								$grabs = $item->xpath('//newznab::attr[@name="grabs"]');
@@ -122,8 +119,7 @@ if(is_file("conf/config.php")){
 <br />
 <div id="results">
 <?php
-    $xml = simplexml_load_string($resp);
-	if($response === true){
+    if($response === true){
 	   foreach ($results as $item):
 			echo "<a href=\"".$item->getLink()."\" ><h3>".$item->getTitle() . "</h3></a><br />";
 			?>
@@ -135,9 +131,7 @@ if(is_file("conf/config.php")){
             <?php
 	   endforeach;
 	}
-	else
-	
-	if($query === false){
+	elseif($query === false){
 		echo "<h3>Enter values above and click search</h3>";
 	}
 	elseif($response === false) {
