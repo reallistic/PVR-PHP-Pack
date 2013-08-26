@@ -8,14 +8,6 @@ $query = false;
 if(is_file("conf/config.php")){
 	$config = true;
 	require("conf/config.php");
-	function escape_query($str) {
-		$str=htmlentities($str, ENT_QUOTES);
-		return strtr($str, array(
-			"\0" => "",
-			"\"" => "&#34;",
-			"\\" => "&#92;"
-		));
-	}
 	
 	if(isset($_REQUEST['q']) && $_REQUEST['q'] != ""){
 		$_SESSION['q']=$_REQUEST['q'];

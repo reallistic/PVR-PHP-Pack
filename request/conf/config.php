@@ -195,4 +195,13 @@ function addIndexSite($n, $a, $c, $u){
 	
 }
 
+function escape_query($str) {
+		$str=htmlentities($str, ENT_QUOTES);
+		return strtr($str, array(
+			"\0" => "",
+			"\"" => "&#34;",
+			"\\" => "&#92;"
+		));
+	}
+	
 ob_end_clean();
