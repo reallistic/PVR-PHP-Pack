@@ -66,69 +66,101 @@ class AUTH{
 	private $enttype = "AES-256-CBC";
 	private $sh;
 	private $iv;
+	public $info;
+	private $auth_file = "../conf/auth.db";
 	
 	function __construct($u, $p){
 		$this->authtoken = NULL;
+		$this->info = array(false,"on init");
 		$this->checkAuth($u, $p);
+		
 	}
 	
-	function checkAuth($u, $p){
-		if($this->authtoken === NULL){
-			if(is_file("auth.db")){
-				$at = unserialize(file_get_contents("auth.db"));
+	private function checkAuth($u, $p){
+		if(!isset($this->authtoken)){
+			if(is_file($this->auth_file)){
+				$at = unserialize(file_get_contents($this->auth_file));
 				if($at instanceof AUTH){
-					$u = openssl_encrypt($u, $this->enttype, $this->sh, $this->iv["usr"]);
-					$p = openssl_encrypt($p, $this->enttype, $this->sh, $this->iv["pwd"]);
+					$u = openssl_encrypt($u, $this->enttype, $this->sh, $at->iv["usr"]);
+					$p = openssl_encrypt($p, $this->enttype, $this->sh, $at->iv["pwd"]);
 					if($at->username === $u && $at->password === $p){
 						$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$u);
+						$this->info = array(true, "logged in successfully");
 					}
 					else{
 						$this->authtoken = NULL;
+						$this->info = array(true, "bad username or password");
 					}
 				}
 				else{
 					$this->authtoken = NULL;
+					$this->info = array(true, "curropt auth.db file");
 				}
 			}
 			else{
 				$this->authtoken = "confirm";
+				$this->info = array(true, "confirm");
+				$this->username = $u;
+				$this->password = $p;
 			}
 		}
-		elseif($this->authtoken != "confirm"){
-			
+		else{
+			$this->info = array(false, "authtoken not null");
 		}
 	}
-	
-	function createAuth($u, $p){
-		if(is_file("auth.db")){
-			unlink("auth.db");
+	public function checkToken(){
+		return ($this->authtoken == md5($_SERVER['REMOTE_ADDR'].$this->username));
+	}
+	public function confirm($p){
+		if($p !== $this->password){
+			$this->info = array(false, "Passwords don't match");
 		}
-		$this->sh = md5("plexcloud.tv");
-		$iv_size1 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
-		$iv1 = mcrypt_create_iv($iv_size1, MCRYPT_RAND);		
-		$iv_size2 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
-		$iv2 = mcrypt_create_iv($iv_size2, MCRYPT_RAND);		
-		$u = openssl_encrypt($u, $this->enttype, $this->sh, $iv1);
-		$p = openssl_encrypt($p, $this->enttype, $this->sh, $iv2);
-		$this->iv = array("usr" => $iv1,"pwd" => $iv2);
-		$this->username = $u;
-		$this->password = $p;
-		$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$u);
-		$fp = fopen("auth.db", 'w+');
-		if(flock($fp, LOCK_EX)) {
-			fwrite($fp, serialize($this));
-			flock($fp, LOCK_UN);
-			return array(true, "Credentials saved");
+		elseif($this->authtoken == "confirm" && isset($this->password) && !is_file($this->auth_file)){
+			$this->info = $this->createAuth();
+		}
+		else{
+			$this->info = array(false, "an error occured2");
+		}
+	}
+	private function createAuth(){		
+		
+		if($this->authtoken === "confirm" || $this->authtoken == md5($_SERVER['REMOTE_ADDR'].$u)){
+			if(is_file($this->auth_file)){
+				unlink($this->auth_file);
+			}
+			$this->sh = md5("plexcloud.tv");
+			$iv_size1 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
+			$iv1 = mcrypt_create_iv($iv_size1, MCRYPT_RAND);		
+			$iv_size2 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
+			$iv2 = mcrypt_create_iv($iv_size2, MCRYPT_RAND);		
+			$u = openssl_encrypt($this->username, $this->enttype, $this->sh, $iv1);
+			$p = openssl_encrypt($this->password, $this->enttype, $this->sh, $iv2);
+			$this->iv = array("usr" => $iv1,"pwd" => $iv2);
+			$this->username = $u;
+			$this->password = $p;
+			$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$u);
+			$fp = fopen("../conf/auth.db", 'w+');
+			if(flock($fp, LOCK_EX)) {
+				fwrite($fp, serialize($this));
+				flock($fp, LOCK_UN);
+				return array(true, "Credentials saved");
+			}
+			else {
+				return array(false, "file cannot be locked");
+			}
 		}
 		else {
-			return array(false, "file cannot be locked");
+			return array(false, "An error occurred1");
 		}
 	}
 	
-	function getUsername(){
+	public function getUsername(){
 		if($this->authtoken != NULL 
 			&& $this->authtoken == md5($_SERVER['REMOTE_ADDR'].$this->username)){
 			return openssl_decrypt($this->username, $this->enttype, $this->sh, $this->iv["usr"]);
+		}
+		elseif($this->authtoken == "confirm"){
+			return $this->username;
 		}
 	}
 }
