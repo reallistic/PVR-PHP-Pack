@@ -2,6 +2,7 @@
 session_start();
 $config = false;
 $indexers = false;
+$indexersprop = false;
 if(is_file("../conf/config.php")){
 	$config = true;
 	require("../conf/config.php");
@@ -27,21 +28,23 @@ if(is_file("../conf/config.php")){
 			if(is_file("../conf/indexsites.db")){
 				$indexers = true; //check for indexers was good
 				$inxs = file_get_contents("../conf/indexsites.db");
-				$inxs = explode("\r\n",$inx);
+				$inxs = explode("\r\n",$inxs);
 				$indexsites=array();
 				$indexersprop = true; //check for indexsites class was good
-				foreach( $inxs as $inx):
+				for( $i=0; $i<count($inxs)-1; $i++){
+					$inx = $inxs[$i];
 					$indexsite = unserialize($inx);
 					if(! $indexsite instanceof INDEXSITE){
 						$indexersprop = false; //cancel that, found an improperly set indexsite
 						$indexsite = NULL;
+						$indexsites=array();
 						break;
 					}
 					else{
 						array_push($indexsites,$indexsite);
 					}
 					$indexsite = NULL;
-				endforeach;
+				}
 			}
 			$error = false;
 		}
@@ -117,9 +120,14 @@ echo "Info: ";
 print_r($at->info);
 echo "<br>error: ";
 print_r($error);
-echo "<br>post: ";
-print_r($_POST);
+echo "<br>indexers: ";
+print_r($indexers);
+echo "<br>indexersprop: ";
+print_r($indexersprop);
+echo "<br>Indexers count: ".count($indexsites);
 echo "<br>Token check: ".$at->checkToken();
+echo "<br>inxs: ";
+print_r($inxs);
 ?>
 </div>
 </body>

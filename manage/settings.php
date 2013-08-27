@@ -38,6 +38,10 @@
             	<td>
                 <strong>Enabled: </strong><input type="checkbox" <?php if($conf->sab['enabled']) echo "checked"; ?> value="true" />
                 </td>
+                 <td>
+                <strong>ApiKey:</strong>
+                <input type="text" name="apikey" value="<?php echo $conf->sab['apikey']; ?>" />
+                </td>
             </tr>
             <tr>
             	<td>
@@ -125,7 +129,7 @@
                         </td>
                         <td>
                         <strong>ApiKey:</strong>
-                        <input type="text" name="sabport" value="<?php echo $inx->getApiKey(); ?>" />
+                        <input type="text" name="apikey" value="<?php echo $inx->getApiKey(); ?>" />
                         </td>
                     </tr>
                     <tr>

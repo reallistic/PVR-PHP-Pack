@@ -9,7 +9,7 @@ class INDEXSITE{
 	
 	public function __construct($n,$a,$u){
 		$this->category = array();
-		array_push($default_cat);
+		array_push($this->category, $default_cat);
 		$this->name = $n;
 		$this->apikey = $a;
 		$this->url = $u;
