@@ -379,20 +379,20 @@ class CONFIG{
 	}
 	
 	public function sendToSab($l, $n){
-		if($this->sab["https"]){
+		if($this->sab["https"] === true){
 			$url = "https://";
 		}
 		else{
 			$url = "http://";
 		}
-		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=addurl&name=".$l."&nzbname=".$n."&apikey=".$this->sab["apikey"];
-		
-		return $url;
-		/*$ch = curl_init($url);
+		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=addurl&name=".$l."&nzbname=".$n."&apikey=".$this->sab["apikey"]."&cat=".$this->sab["category"];
+		$this->info= array(true, $url);
+		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$resp = curl_exec($ch);
-		curl_close($ch);*/
+		curl_close($ch);
+		return $resp;
 	}
 	
 }
