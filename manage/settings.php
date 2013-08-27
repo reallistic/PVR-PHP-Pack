@@ -21,6 +21,8 @@
         <a name="general"></a>
         <h4>General Settings</h4>
         <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
+        <input type="hidden" name="t" value="credentials" />
+        <input type="hidden" name="method" value="edit" />
         <table>
             <tr>
             	<td>

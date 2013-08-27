@@ -16,6 +16,8 @@ if(is_file("../conf/config.php")){
 			$n = escape_query($_POST['name']);
 			$u = escape_query($_POST['url']);
 			$a = escape_query($_POST['apikey']);
+			$nu = escape_query($_POST['usr']);
+			$np = escape_query($_POST['pwd']);
 			$ind = intval(escape_query($_POST['index']));
 			$mthd = escape_query($_POST['method']);
 			$port = escape_query($_POST['port']);
@@ -50,8 +52,7 @@ if(is_file("../conf/config.php")){
 					}
 				break;
 				case "sabnzbd":
-					if($mthd == "edit"){
-						
+					if($mthd == "edit"){						
 						$s = array(
 							"server"=>$u,
 							"apikey"=>$a,
@@ -62,6 +63,12 @@ if(is_file("../conf/config.php")){
 						);
 						$conf = new CONFIG;
 						$conf->saveSabConfig($s);
+					}
+				break;
+				case "credentials":
+					if($mthd == "edit"){
+						$_SESSION['response'] = $at->changeAuth($nu, $np);
+						$_SESSION['authtoken'] = serialize($at);
 					}
 				break;
 				default:

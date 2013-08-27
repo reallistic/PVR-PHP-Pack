@@ -283,7 +283,7 @@ class AUTH{
 	}
 	private function createAuth(){		
 		
-		if($this->authtoken === "confirm" || $this->authtoken == md5($_SERVER['REMOTE_ADDR'].$u)){
+		if($this->authtoken === "confirm" || $this->checkAuth($this->username, $this->password)){
 			if(is_file($this->auth_file)){
 				unlink($this->auth_file);
 			}
@@ -302,6 +302,31 @@ class AUTH{
 		}
 		else {
 			return array(false, "An error occurred1");
+		}
+	}
+	
+	public function changeAuth($nu, $np){		
+		
+		if($this->checkToken()){
+			if(is_file($this->auth_file)){
+				unlink($this->auth_file);
+			}
+			$this->username = $nu;
+			$np = md5($np);
+			$this->password = $np;
+			$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$nu);
+			$fp = fopen("../conf/auth.db", 'w+');
+			if(flock($fp, LOCK_EX)) {
+				fwrite($fp, serialize($this));
+				flock($fp, LOCK_UN);
+				return "Credentials saved ".$this->username;
+			}
+			else {
+				return "file cannot be locked";
+			}
+		}
+		else {
+			return "An error occurred1";
 		}
 	}
 	

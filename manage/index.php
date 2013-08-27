@@ -72,11 +72,11 @@ if($at ==NULL || (!$at->checkToken() && $at->info[1]!="confirm")){ ?>
 	<div id="dialog" title="Login">
 	  <form method="post" enctype="multipart/form-data">
       		<label>Username:<br />
-                <input type="text" name="usr" value="plexcloud" />
+                <input type="text" name="usr" value="" />
             </label>
             <br />
             <label>Password:<br />
-                <input type="password" name="pwd" value="administrator" />
+                <input type="password" name="pwd" value="" />
             </label>
                 <br />
                 <input type="submit" value="Login" />
@@ -103,6 +103,12 @@ else{
 } ?>
 <div id="info">
 <?php
+	$notify=false;
+	if(isset($_SESSION['response'])){
+		echo "<p>".$_SESSION['response']."</p>";
+		unset($_SESSION['response']);
+		$notify=true;
+	}
 	if($config === false){
 		echo "<h3>Improper installation. Missing config.php</h3>";
 	}
@@ -112,7 +118,14 @@ echo "<br>error: ";
 var_dump($error);
 echo "confInfo: ";
 var_dump($conf->info);
-?>
+if($notify){ ?>
+   	<script type="text/javascript">
+		$(function() {
+			$("#info").show();
+			$( "#info" ).dialog();
+		});
+  </script>
+<?php } ?>
 </div>
 </body>
 </html>
