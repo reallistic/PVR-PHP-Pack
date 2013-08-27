@@ -10,7 +10,7 @@ if(is_file("../conf/config.php")){
 		$u = escape_query($_POST['usr']);
 		$p = escape_query($_POST['pwd']);
 		$at = new AUTH($u,$p);
-		if($at->info[0]){
+		if($at->checkToken()){
 			$_SESSION['authtoken'] = serialize($at);
 		}
 	}
@@ -19,7 +19,7 @@ if(is_file("../conf/config.php")){
 		$p = escape_query($_POST['cpwd']);
 		$at->confirm($p);
 	}
-	elseif(isset($_SESSION['authtoken'])){
+	if(isset($_SESSION['authtoken'])){
 		$at = unserialize($_SESSION['authtoken']);
 		if(!$at->checkToken() && $at->info[1] !="confirm"){
 			header("location: logout.php");
