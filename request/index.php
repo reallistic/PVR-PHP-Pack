@@ -34,7 +34,9 @@ if(is_file("../conf/config.php")){
 			$curls=array();
 			for( $i=0; $i<count($indexsites); $i++){
 				$indexsite = $indexsites[$i];
-				
+				if(!$indexsite->isEnabled()){
+					continue;
+				}
 				array_push($curls, $indexsite->makeSearch($q));
 				
 				$ch = curl_init($indexsite->makeSearch($q));
@@ -64,11 +66,6 @@ if(is_file("../conf/config.php")){
 			}
 		}
 	}
-	
-	unset($_SESSION['q']);
-	unset($_SESSION);
-	session_destroy();
-	session_unset();
 }
 ?>
 <!doctype html>
@@ -134,15 +131,18 @@ if(is_file("../conf/config.php")){
             <?php
                 if($response === true){
                     /*echo implode("<br>",$results);*/
+					$i=0;
                    foreach ($results as $item): ?>
-                        <form enctype="application/x-www-form-urlencoded" method="post" action="#">
-                        	<input type="hidden" name="nzbname" value="<?php echo $item->getTitle(); ?>" />
-                            <input type="hidden" name="name" value="<?php echo $item->getLink(); ?>" /> 
+                        <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" action="../conf/notify.php">
+                        	<input type="hidden" name="name" value="<?php echo $item->getTitle(); ?>" />
+                            <input type="hidden" name="link" value="<?php echo $item->getLink(); ?>" /> 
+                            <input type="hidden" name="method" value="sabnzbd" /> 
 			    <?php echo "<a href=\"".$item->getLink()."\" ><h3>".$item->getTitle() . "</h3></a> <strong>Grabs: ".$item->getGrabs();?>
-                			<input type="submit" value="Add" />
+                			<input type="submit" value="Send" />
                             <br />
                         </form>
                         <?php
+						$i++;
                    endforeach;
                 }
                 elseif($query === false){
@@ -156,20 +156,40 @@ if(is_file("../conf/config.php")){
         </div>
     </div>
 </div>
-<div id="info">
+<div id="info" style="display:none;" title="Notifications">
 <?php
+	$notify=false;
+	if(isset($_SESSION['response'])){
+		echo "<p>".$_SESSION['response']."</p>";
+		$notify=true;
+	}
 	if($config === false){
 		echo "<h3>Improper installation. Missing config.php</h3>";
+		$notify=true;
 	}
 	elseif($indexers === false){
 		echo "Please configure at least one index site<a class=\"button\" href=\"../manage/\" >Manage</a>";
+		$notify=true;
 	}
 	elseif($indexersprop === false){
 		echo "index site db curropted please repair<a class=\"button\" href=\"../manage/\" >Manage</a>";
+		$notify=true;
 	}
 	
-	if($query){
-	}
+	if($notify){ ?>
+   	<script type="text/javascript">
+		$(function() {
+			$("#info").show();
+			$( "#info" ).dialog();
+		});
+  </script>
+<?php }
+	unset($_SESSION['q']);
+	unset($_SESSION['response']);
+	unset($_SESSION);
+	session_destroy();
+	session_unset();
+	exit;
 	?>
 </div>
 </body>
