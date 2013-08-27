@@ -1,6 +1,8 @@
 <?php
 session_start();
 $config = false;
+$indexers = false;
+$indexersprop = false;
 if(is_file("../conf/config.php")){
 	$config = true;
 	require("../conf/config.php");
@@ -23,7 +25,27 @@ if(is_file("../conf/config.php")){
 			header("location: logout.php");
 		}
 		elseif($at->checkToken()){
-			//logged in successfully
+			if(is_file("../conf/indexsites.db")){
+				$indexers = true; //check for indexers was good
+				$inxs = file_get_contents("../conf/indexsites.db");
+				$inxs = explode("\r\n",$inxs);
+				$indexsites=array();
+				$indexersprop = true; //check for indexsites class was good
+				for( $i=0; $i<count($inxs)-1; $i++){
+					$inx = $inxs[$i];
+					$indexsite = unserialize($inx);
+					if(! $indexsite instanceof INDEXSITE){
+						$indexersprop = false; //cancel that, found an improperly set indexsite
+						$indexsite = NULL;
+						$indexsites=array();
+						break;
+					}
+					else{
+						array_push($indexsites,$indexsite);
+					}
+					$indexsite = NULL;
+				}
+			}
 			$error = false;
 		}
 	}
@@ -41,15 +63,17 @@ if(is_file("../conf/config.php")){
 <title>Plexcloud - Music | Manage</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet"></link>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
+<link href="../conf/style.css" rel="stylesheet" type="text/css"></link>
 <script>
   $(function() {
     $( "#dialog" ).dialog();
   });
+  $(function() {
+		$("input[type=submit], button, a.button" )
+		  .button();
+	 });
 </script>
-<style type="text/css">
-
-</style>
 </head>
 
 <body>
@@ -84,8 +108,8 @@ elseif(isset($at) && $at->info[1]=="confirm"){ ?>
       </form>
 	</div> <?php
 } 
-else{ print_r($at->info);?>
-	<h3> Logged in</h3><?php
+else{
+	include("settings.php");
 } ?>
 <div id="info">
 <?php
@@ -96,9 +120,14 @@ echo "Info: ";
 print_r($at->info);
 echo "<br>error: ";
 print_r($error);
-echo "<br>post: ";
-print_r($_POST);
+echo "<br>indexers: ";
+print_r($indexers);
+echo "<br>indexersprop: ";
+print_r($indexersprop);
+echo "<br>Indexers count: ".count($indexsites);
 echo "<br>Token check: ".$at->checkToken();
+echo "<br>inxs: ";
+print_r($inxs);
 ?>
 </div>
 </body>

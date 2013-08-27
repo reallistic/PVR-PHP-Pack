@@ -5,21 +5,24 @@ class INDEXSITE{
 	private $category;
 	private $url;
 	public static $default_cat = "3010";
+	public $enabled;
 	
-	function __construct($n,$a,$u){
+	public function __construct($n,$a,$u){
 		$this->category = array();
+		array_push($this->category, $default_cat);
 		$this->name = $n;
 		$this->apikey = $a;
 		$this->url = $u;
+		$this->enabled = true;
 	}
 	
-	function addCat($c){
+	public function addCat($c){
 		if(in_array($c, $this->category, true) === false){
 			array_push($c);
 		}
 	}
 	
-	function removeCat($c){
+	public function removeCat($c){
 		if(in_array($c, $this->category, true) === false){
 			return false;
 		}
@@ -28,12 +31,12 @@ class INDEXSITE{
 		}
 	}
 	
-	function makeSearch($q){
+	public function makeSearch($q){
 		$cats = implode(', ', $this->category);
 		return $this->url."?apikey=".$this->apikey."cat=".$cats."&extended=1"."&t=search&q=".$q;
 	}
 	
-	function saveSite(){
+	public function saveSite(){
 		$fp = fopen("indexsites.db", 'w+');
 		if(flock($fp, LOCK_EX)) {
 			fwrite($fp, serialize($this) . "\r\n");
@@ -45,6 +48,21 @@ class INDEXSITE{
 		}
 		
 		fclose($fp);
+	}
+	
+	public function getName(){
+	}
+	
+	public function getApiKey(){
+		return $this->apikey;
+	}
+	
+	public function getUrl(){
+		return $this->url;
+	}
+	
+	public function getCat(){
+		return $this->category;
 	}
 	
 	/*$resp = "";
@@ -81,11 +99,11 @@ class AUTH{
 			if(is_file($this->auth_file)){
 				$at = unserialize(file_get_contents($this->auth_file));
 				if($at instanceof AUTH){
-					$u = openssl_encrypt($u, $this->enttype, $this->sh, $at->iv["usr"]);
-					$p = openssl_encrypt($p, $this->enttype, $this->sh, $at->iv["pwd"]);
-					if($at->username === $u && $at->password === $p){
+					$p = md5($p);
+					$this->username = $u;
+					if($at->getUsername() === $u && $at->getPassword() === $p){
 						$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$u);
-						$this->info = array(true, "logged in successfully");
+						$this->info = array(true, "logged in successfully ".gettype($at->getUsername()));
 					}
 					else{
 						$this->authtoken = NULL;
@@ -128,22 +146,14 @@ class AUTH{
 			if(is_file($this->auth_file)){
 				unlink($this->auth_file);
 			}
-			$this->sh = md5("plexcloud.tv");
-			$iv_size1 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
-			$iv1 = mcrypt_create_iv($iv_size1, MCRYPT_RAND);		
-			$iv_size2 = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
-			$iv2 = mcrypt_create_iv($iv_size2, MCRYPT_RAND);		
-			$u = openssl_encrypt($this->username, $this->enttype, $this->sh, $iv1);
-			$p = openssl_encrypt($this->password, $this->enttype, $this->sh, $iv2);
-			$this->iv = array("usr" => $iv1,"pwd" => $iv2);
-			$this->username = $u;
-			$this->password = $p;
-			$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$u);
+			$np = md5($this->password);
+			$this->password = $np;
+			$this->authtoken = md5($_SERVER['REMOTE_ADDR'].$this->username);
 			$fp = fopen("../conf/auth.db", 'w+');
 			if(flock($fp, LOCK_EX)) {
 				fwrite($fp, serialize($this));
 				flock($fp, LOCK_UN);
-				return array(true, "Credentials saved");
+				return array(true, "Credentials saved ".$this->username);
 			}
 			else {
 				return array(false, "file cannot be locked");
@@ -155,13 +165,11 @@ class AUTH{
 	}
 	
 	public function getUsername(){
-		if($this->authtoken != NULL 
-			&& $this->authtoken == md5($_SERVER['REMOTE_ADDR'].$this->username)){
-			return openssl_decrypt($this->username, $this->enttype, $this->sh, $this->iv["usr"]);
-		}
-		elseif($this->authtoken == "confirm"){
-			return $this->username;
-		}
+		return $this->username;
+	}
+	
+	public function getPassword(){
+		return $this->password;
 	}
 }
 

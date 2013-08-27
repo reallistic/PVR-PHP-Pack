@@ -82,6 +82,10 @@ if(is_file("../conf/config.php")){
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet"></link>
 <script type="text/javascript">
+	$(function() {
+		$( "input[type=submit], a, button" )
+		  .button();
+	 });
 	function doSubmit(){
 		if($("input[name=album]").val() != "" || $("input[name=artist]").val() != ""){
 			$("form").submit();
