@@ -18,19 +18,22 @@ if(is_file("../conf/config.php")){
 			$a = escape_query($_POST['apikey']);
 			$ind = intval(escape_query($_POST['index']));
 			$mthd = escape_query($_POST['method']);
+			$port = escape_query($_POST['port']);
+			$https = (escape_query($_POST['https']) == "true");
+			$enabled = (escape_query($_POST['enabled']) == "true");
+			$category = escape_query($_POST['cat']);
 			$error = false;
 			switch($t){
 				case "indexsite":
 					if($mthd == "add"){
-						//echo "apikey is ".$a;
-						$is = new INDEXSITE($n, $a, $u, $ind);
+						//check if added indexsite already exists
+						$is = new INDEXSITE($n, $a, $u, $ind, $enabled);
 						$is->saveSite();
 					}
 					elseif($mthd == "delete"){
 						$is = INDEXSITE::withID($ind);
 						if($is instanceof INDEXSITE){
 							$_SESSION['response']=$is->delSite();
-							//echo "in delete<br>";
 							//print_r($_SESSION['response']);
 						}
 						else{
@@ -41,35 +44,30 @@ if(is_file("../conf/config.php")){
 						$is = INDEXSITE::withID($ind);
 						if($is instanceof INDEXSITE){
 							$_SESSION['response']=$is->delSite();
-							$is = new INDEXSITE($n, $a, $u, $ind);
+							$is = new INDEXSITE($n, $a, $u, $ind, $enabled);
 							$is->saveSite();
 						}
+					}
+				break;
+				case "sabnzbd":
+					if($mthd == "edit"){
+						
+						$s = array(
+							"server"=>$u,
+							"apikey"=>$a,
+							"port"=>$port,
+							"category"=>$category,
+							"enabled"=>$enabled,
+							"https"=>$https
+						);
+						$conf = new CONFIG;
+						$conf->saveSabConfig($s);
 					}
 				break;
 				default:
 					$error = true;
 				break;
 			}
-			/*if(is_file("../conf/indexsites.db")){
-				//check if added indexsite already exists
-				$indexers = true; //check for indexers was good
-				$inxs = file_get_contents("../conf/indexsites.db");
-				$inxs = explode("\r\n",$inx);
-				$indexsites=array();
-				$indexersprop = true; //check for indexsites class was good
-				foreach( $inxs as $inx):
-					$indexsite = unserialize($inx);
-					if(! $indexsite instanceof INDEXSITE){
-						$indexersprop = false; //cancel that, found an improperly set indexsite
-						$indexsite = NULL;
-						break;
-					}
-					else{
-						array_push($indexsites,$indexsite);
-					}
-					$indexsite = NULL;
-				endforeach;
-			}*/
 		}
 	}
 	else{
