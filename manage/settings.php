@@ -1,6 +1,6 @@
 <div class="mainCont">
 	<div class="head">
-    	Welcome to plexcloud config
+    	PlexCloud - Music made easy
     </div>
 <div class="innerCont">
 	<h3>Config</h3>
@@ -104,14 +104,15 @@
         <h4>Indexers</h4>
         <?php 
 		$i=0;
+		$nextindex=0;
 		if($indexers === true){
 			for($i; $i<count($indexsites); $i++){ 
 				$inx = $indexsites[$i] ?>
                 
                 <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
                 <input type="hidden" name="t" value="indexsite" />
-                <input type="hidden" name="index" value="<?php echo $i; ?>" />
-                <input type="text" disabled="disabled" value="<?php echo $i; ?>" />
+                <input type="hidden" name="index" value="<?php echo $inx->getId(); ?>" />
+                <input type="text" disabled="disabled" value="<?php echo $inx->getId(); ?>" />
                 <table>
                     <tr>
                         <td>
@@ -119,7 +120,7 @@
                         <input type="text" name="name" value="<?php echo $inx->getName(); ?>" />
                         </td>
                         <td>
-                        <strong>Enabled: </strong><input type="checkbox" <?php if($inx->enabled) echo "checked"; ?> value="true" />
+                        <strong>Enabled: </strong><input type="checkbox" <?php if($inx->isEnabled()) echo "checked"; ?> value="true" />
                         </td>
                     </tr>
                     <tr>
@@ -140,14 +141,22 @@
                    </tr>
                 </table>
                 </form>
+                <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
+                    <input type="hidden" name="t" value="indexsite" />
+                    <input type="hidden" name="method" value="delete" />
+                    <input type="hidden" name="index" value="<?php echo $inx->getId(); ?>" />
+                	<input type="submit" value="delete" />
+                </form>
                 <br />
-				<?php	
+				<?php
+				$nextindex = intval($inx->getId())+1;
 			}
 		} ?>
         <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
         <input type="hidden" name="t" value="indexsite" />
-        <input type="hidden" name="index" value="<?php echo $i; ?>" />
-        <input type="text" disabled="disabled" value="<?php echo $i; ?>" />
+        <input type="hidden" name="method" value="add" />
+        <input type="hidden" name="index" value="<?php echo $nextindex; ?>" />
+        <input type="text" disabled="disabled" value="<?php echo $nextindex; ?>" />
         <table>
             <tr>
                 <td>
@@ -165,7 +174,7 @@
                 </td>
                 <td>
                 <strong>ApiKey:</strong>
-                <input type="text" name="sabport" value="" />
+                <input type="text" name="apikey" value="" />
                 </td>
             </tr>
             <tr>
