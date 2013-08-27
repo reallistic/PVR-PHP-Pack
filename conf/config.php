@@ -307,6 +307,8 @@ class CONFIG{
 		"enabled" => true
 	);
 	
+	public $info;
+	
 	private $file = "../conf/config.db";
 	
 	public function __construct(){

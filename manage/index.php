@@ -35,8 +35,7 @@ if(is_file("../conf/config.php")){
 			}
 			
 			$conf = new CONFIG;
-			$sab = $conf->getSab();
-			
+			$sab = $conf->getSab();			
 			$error = false;
 		}
 	}
@@ -107,18 +106,12 @@ else{
 	if($config === false){
 		echo "<h3>Improper installation. Missing config.php</h3>";
 	}
-echo "Info: ";
+echo "auth Info: ";
 var_dump($at->info);
 echo "<br>error: ";
 var_dump($error);
-echo "<br>indexers: ";
-var_dump($indexers);
-echo "<br>indexersprop: ";
-var_dump($indexersprop);
-echo "<br>Indexers count: ".count($indexsites);
-echo "<br>Token check: ".$at->checkToken();
-echo "<br>inxs: ";
-var_dump($inxs);
+echo "confInfo: ";
+var_dump($conf->info);
 ?>
 </div>
 </body>
