@@ -28,22 +28,9 @@ if(is_file("../conf/config.php")){
 			if(is_file("../conf/indexsites.db")){
 				$indexers = true; //check for indexers was good
 				$inxs = file_get_contents("../conf/indexsites.db");
-				$inxs = explode("\r\n",$inxs);
-				$indexsites=array();
-				$indexersprop = true; //check for indexsites class was good
-				for( $i=0; $i<count($inxs)-1; $i++){
-					$inx = $inxs[$i];
-					$indexsite = unserialize($inx);
-					if(! $indexsite instanceof INDEXSITE){
-						$indexersprop = false; //cancel that, found an improperly set indexsite
-						$indexsite = NULL;
-						$indexsites=array();
-						break;
-					}
-					else{
-						array_push($indexsites,$indexsite);
-					}
-					$indexsite = NULL;
+				$indexsites = unserialize($inxs);
+				if(is_array($indexsites)){
+					$indexersprop = true; //check for indexsites class was good
 				}
 			}
 			$error = false;
@@ -117,17 +104,17 @@ else{
 		echo "<h3>Improper installation. Missing config.php</h3>";
 	}
 echo "Info: ";
-print_r($at->info);
+var_dump($at->info);
 echo "<br>error: ";
-print_r($error);
+var_dump($error);
 echo "<br>indexers: ";
-print_r($indexers);
+var_dump($indexers);
 echo "<br>indexersprop: ";
-print_r($indexersprop);
+var_dump($indexersprop);
 echo "<br>Indexers count: ".count($indexsites);
 echo "<br>Token check: ".$at->checkToken();
 echo "<br>inxs: ";
-print_r($inxs);
+var_dump($inxs);
 ?>
 </div>
 </body>

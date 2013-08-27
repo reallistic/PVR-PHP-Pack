@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="auth.db" server="rxse.co//var/www/webroot/" local="130220271660000000" remote="130220271660000000" Dst="2" />
-<file name="config.php" server="rxse.co//var/www/webroot/" local="130220437755691636" remote="130220437720000000" Dst="2" />
-<file name="style.css" server="rxse.co//var/www/webroot/" local="130220411275428642" remote="130220411240000000" Dst="2" />
-<file name="logout.php" server="rxse.co//var/www/webroot/" local="130220223100000000" remote="130220223100000000" Dst="2" />
-<file name="changeconf.php" server="rxse.co//var/www/webroot/" local="130220439171343737" remote="130220439190000000" Dst="2" />
-<file name="indexsites.db" server="rxse.co//var/www/webroot/" local="130220439640000000" remote="130220439640000000" Dst="2" />
+<file name="config.php" server="rxse.co//var/www/webroot/" local="130220934867867601" remote="130220934760000000" />
+<file name="logout.php" server="rxse.co//var/www/webroot/" local="130220223100000000" remote="130220223100000000" />
+<file name="style.css" server="rxse.co//var/www/webroot/" local="130220808369732322" remote="130220808270000000" />
+<file name="changeconf.php" server="rxse.co//var/www/webroot/" local="130220899856775081" remote="130220899760000000" />
+<file name="Logobloqo2.ttf" server="rxse.co//var/www/webroot/" local="129340536380000000" remote="130220804340000000" />
 </dwsync>

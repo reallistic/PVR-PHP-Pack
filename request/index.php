@@ -21,26 +21,9 @@ if(is_file("../conf/config.php")){
 		session_destroy();
 		if(is_file("../conf/indexsites.db")){
 			$indexers = true; //check for indexers was good
-			
 			$inxs = file_get_contents("../conf/indexsites.db");
-			$inxs = explode("\r\n",$inx);
-			$indexsites=array();
-			$resp ="";
-			$results=array();
-			$filter = array();
-			$indexersprop = true; //check for indexsites class was good
-			foreach( $inxs as $inx):
-				$indexsite = unserialize($inx);
-				if(! $indexsite instanceof INDEXSITE){
-					$indexersprop = false; //cancel that, found an improperly set indexsite
-					$indexsite = NULL;
-					break;
-				}
-				else{
-					array_push($indexsites,$indexsite);
-				}
-				$indexsite = NULL;
-			endforeach;
+			$indexsites = unserialize($inxs);
+			$indexersprop = is_array($indexsites); //check for indexsites class was good
 			if($indexersprop === true){
 				for( $i=0; $i<count($indexsites); $i++){
 					$indexsite = $indexsites[$i];

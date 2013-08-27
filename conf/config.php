@@ -5,17 +5,48 @@ class INDEXSITE{
 	private $category;
 	private $url;
 	public static $default_cat = "3010";
-	public $enabled;
+	private $enabled;
+	private $id;
 	
-	public function __construct($n,$a,$u){
+	public function __construct($n,$a,$u, $i){
 		$this->category = array();
 		array_push($this->category, $default_cat);
 		$this->name = $n;
 		$this->apikey = $a;
 		$this->url = $u;
 		$this->enabled = true;
+		$this->id = $i;
 	}
-	
+	public static function withID($id){
+		$response = array();
+		if(is_file("../conf/indexsites.db")){
+			$inxs = file_get_contents("../conf/indexsites.db");
+			$inxs = unserialize($inxs);
+			if(!is_array($inxs)){
+				array_push($response, "indexsite db was curropt");
+			}
+			else{
+				for( $i=0; $i<count($inxs); $i++){
+					$indexsite = $inxs[$i];
+					if($indexsite->getId() == $id){
+						return $indexsite;
+					}
+					else{
+						array_push($response, "Found non- matching indexsite:");
+						array_push($response, "-id ".$id." ".$indexsite->getId());
+						array_push($response, "-name ".$indexsite->getName());
+						array_push($response, "-url ".$indexsite->getUrl());
+						array_push($response, "-apikey ".$indexsite->getApiKey());
+					}
+				}
+			}
+		}
+		else{
+			array_push($response, "indexsite db not found");
+		}
+		
+		return implode(",",$response);
+	}
 	public function addCat($c){
 		if(in_array($c, $this->category, true) === false){
 			array_push($c);
@@ -37,9 +68,20 @@ class INDEXSITE{
 	}
 	
 	public function saveSite(){
-		$fp = fopen("indexsites.db", 'w+');
+		if(is_file("../conf/indexsites.db")){
+			$inxs = file_get_contents("../conf/indexsites.db");
+			$inxs = unserialize($inxs);
+			if(!is_array($inxs)){
+				$inxs=array();
+			}
+		}
+		else{
+			$inxs = array();
+		}
+		array_push($inxs, $this);
+		$fp = fopen("../conf/indexsites.db", 'w+');
 		if(flock($fp, LOCK_EX)) {
-			fwrite($fp, serialize($this) . "\r\n");
+			fwrite($fp, serialize($inxs));
 			flock($fp, LOCK_UN);
 			return array(true, "site ".$this->name." saved");
 		}
@@ -50,7 +92,82 @@ class INDEXSITE{
 		fclose($fp);
 	}
 	
+	public function delSite(){
+		$response = array();
+		if(is_file("../conf/indexsites.db")){
+			$inxs = file_get_contents("../conf/indexsites.db");
+			$inxs = unserialize($inxs);
+			if(!is_array($inxs)){
+				$inxs=array();
+			}
+			$savedsites=array();
+			
+			for( $i=0; $i<count($inxs); $i++){
+				$indexsite = $inxs[$i];
+				if(!$this->isEqual($indexsite)){
+					array_push($savedsites,$indexsite);
+					array_push($response, "Found non- matching indexsite:");
+					array_push($response, "-id ".$this->id." ".$indexsite->getId());
+					array_push($response, "-name ".$this->name." ".$indexsite->getName());
+					array_push($response, "-url ".$this->url." ".$indexsite->getUrl());
+					array_push($response, "-apikey ".$this->apikey." ".$indexsite->getApiKey());
+				}
+				elseif($this->isEqual($indexsite)){
+					//found site, skip it
+					array_push($response, "Found indexsite skipping");
+				}
+				elseif(!$indexsite instanceof INDEXSITE){
+					//improperly formatted skip it
+					array_push($response, "Found improper indexsite skipping");
+				}
+				else{
+					array_push($response, "error found object of type ". gettype($indexsite));
+				}
+			}
+			
+			if(count($inxs)>0 && count($savedsites) >0  && count($inxs) != count($savedsites)) {
+				$fp = fopen("indexsites.db", 'w+');
+				if(flock($fp, LOCK_EX)){
+					fwrite($fp, serialize($savedsites));
+					flock($fp, LOCK_UN);
+					array_push($response, "saved ". count($savedsites) . " site(s)");
+				}
+				else{
+					array_push($response, "failed saving ". count($savedsites) . " site(s). file cannot be locked");
+				}
+			}
+			elseif(count($inxs)==0 || count($savedsites) == 0 ) {
+				array_push($response, "either the index site db was curropt or no sites were saved");
+				unlink("../conf/indexsites.db");
+			}
+			elseif(count($inxs) == count($savedsites)){
+				array_push($response, "no changes neccassary");
+			}
+			else{
+				array_push($response, "error ". count($inxs) . " sites in db ".count($savedsites) . " sites found");
+			}
+		}
+		else{
+			array_push($response, "indexsite db not found");
+		}
+		
+		return implode(",",$response);
+	}
+	
+	public function isEqual($obj){
+		if($obj instanceof INDEXSITE){
+			return ($this->apikey === $obj->getApiKey() && $this->id === $obj->getId() && $this->name === $obj->getName() && $this->url === $obj->getUrl());
+		}
+		
+		return false;
+	}
+	
+	public function sameClass($obj){
+		return $obj instanceof $this;
+	}
+	
 	public function getName(){
+		return $this->name;
 	}
 	
 	public function getApiKey(){
@@ -63,6 +180,14 @@ class INDEXSITE{
 	
 	public function getCat(){
 		return $this->category;
+	}
+	
+	public function getId(){
+		return $this->id;
+	}
+	
+	public function isEnabled(){
+		return $this->enabled;
 	}
 	
 	/*$resp = "";

@@ -1,6 +1,6 @@
 <?php
 session_start();
-ob_start();
+//ob_start();
 $config = false;
 $indexers = false;
 if(is_file("../conf/config.php")){
@@ -16,11 +16,27 @@ if(is_file("../conf/config.php")){
 			$n = escape_query($_POST['name']);
 			$u = escape_query($_POST['url']);
 			$a = escape_query($_POST['apikey']);
+			$ind = intval(escape_query($_POST['index']));
+			$mthd = escape_query($_POST['method']);
 			$error = false;
 			switch($t){
 				case "indexsite":
-					$is = new INDEXSITE($n, $a, $u);
-					$is->saveSite();
+					if($mthd == "add"){
+						echo "apikey is ".$a;
+						$is = new INDEXSITE($n, $a, $u, $ind);
+						$is->saveSite();
+					}
+					elseif($mthd == "delete"){
+						$is = INDEXSITE::withID($ind);
+						if($is instanceof INDEXSITE){
+							$_SESSION['response']=$is->delSite();
+							echo "in delete<br>";
+							print_r($_SESSION['response']);
+						}
+						else{
+							print_r($is);
+						}
+					}
 				break;
 				default:
 					$error = true;
@@ -52,7 +68,7 @@ if(is_file("../conf/config.php")){
 		$error = true;
 	}
 }
-header("location: ../manage/");
-ob_end_clean();
+//header("location: ../manage/");
+//ob_end_clean();
 exit;
 ?>
