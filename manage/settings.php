@@ -118,7 +118,6 @@
                 <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
                 <input type="hidden" name="t" value="indexsite" />
                 <input type="hidden" name="index" value="<?php echo $inx->getId(); ?>" />
-                <input type="text" disabled="disabled" value="<?php echo $inx->getId(); ?>" />
                 <table>
                     <tr>
                         <td>
@@ -162,7 +161,6 @@
         <input type="hidden" name="t" value="indexsite" />
         <input type="hidden" name="method" value="add" />
         <input type="hidden" name="index" value="<?php echo $nextindex; ?>" />
-        <input type="text" disabled="disabled" value="<?php echo $nextindex; ?>" />
         <table>
             <tr>
                 <td>
