@@ -33,7 +33,7 @@ a.button, button, input[type="button"],input[type="submit"]{
 }
 .mainCont{
 	position:relative;
-	/*text-align:center;*/
+	margin-top:40px;
 }
 
 .innerCont{
@@ -54,9 +54,15 @@ a.button, button, input[type="button"],input[type="submit"]{
 	border:1px solid #fff;
 	padding:10px;
 }
-
+.outerHead{
+	position:fixed;
+	z-index:1;
+	top:0px;
+	text-align:center;
+	width:100%;
+}
 .head{
-	position:relative;
+	position:relative;	
 	width: 900px;
 	margin:0px auto 0px auto;
 	box-shadow: 0px 0px 18px 1px #888888;
@@ -84,4 +90,13 @@ a.button, button, input[type="button"],input[type="submit"]{
 	
 	/* Opera 11.10+ */
 	background: -o-linear-gradient(top, #FFFFFF, #EAEAEA);
+}
+
+.subhead{
+	position:relative;
+	width:auto;
+	height:40px;
+	float:left;
+	padding-right:20px;
+	line-height:40px;
 }

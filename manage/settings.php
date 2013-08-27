@@ -1,10 +1,21 @@
-<div class="mainCont">
+<div class="outerHead">
 	<div class="head">
     	PlexCloud - Music made easy
     </div>
+</div>
+<div class="mainCont">
+	
 <div class="innerCont">
-	<h3>Config</h3>
-    <a class="button" href="../conf/logout.php">Logout</a>
+	<div class="subhead">
+    	<h3>Config</h3>
+    </div>
+    <div class="subhead">
+    	<a class="button" href="../request/">Request</a>
+    </div>
+    <div class="subhead">
+    	<a class="button" href="../conf/logout.php">Logout</a>
+    </div>
+    <div style="clear:both"></div>
     <hr />
     <div>
         <a name="general"></a>

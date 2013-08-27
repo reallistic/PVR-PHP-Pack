@@ -66,7 +66,7 @@ if(is_file("../conf/config.php")){
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet"></link>
 <script type="text/javascript">
 	$(function() {
-		$( "input[type=submit], a, button" )
+		$( "input[type=submit], a.button, button" )
 		  .button();
 	 });
 	function doSubmit(){
@@ -96,10 +96,10 @@ if(is_file("../conf/config.php")){
 		echo "<h3>Improper installation. Missing config.php</h3>";
 	}
 	elseif($indexers === false){
-		echo "<a href=\"/manage/\" ><h3>Please configure at least one index site</h3></a>";
+		echo "<a class=\"button\" href=\"../manage/\" >Please configure at least one index site</a>";
 	}
 	elseif($indexersprop === false){
-		echo "<a href=\"/manage/\" ><h3>index site db curropted please repair</h3></a>";
+		echo "<a class=\"button\" href=\"../manage/\" >index site db curropted please repair</a>";
 	}
 	?>
 </div>
