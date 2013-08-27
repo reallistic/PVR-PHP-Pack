@@ -28,7 +28,7 @@ body{
 	background-color:#DDD;
 	font-size:12px;
 }
-a.button, button, input[type="button"],input[type="submit"]{
+a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 	font-size:11px;
 }
 .mainCont{
@@ -49,10 +49,11 @@ a.button, button, input[type="button"],input[type="submit"]{
 	position:fixed;
 	top:5px;
 	left:5px;
-	width:320px;
+	width:300px;
 	overflow:auto;
 	border:1px solid #fff;
 	padding:10px;
+	word-wrap:break-word;
 }
 .outerHead{
 	position:fixed;
