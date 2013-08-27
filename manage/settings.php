@@ -44,20 +44,24 @@
         <h4>Sabnzbd</h4>
         <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
         <input type="hidden" name="t" value="sabnzbd" />
+        <input type="hidden" name="method" value="edit" />
         <table>
         	<tr>
             	<td colspan="2">
-                <strong>Enabled: </strong><input type="checkbox" <?php if($sab['enabled']) echo "checked"; ?> value="true" />
+                <strong>Enabled: </strong>
+                <input name="enabled" type="checkbox" <?php if($sab['enabled']) echo "checked"; ?> value="true" />
+                <strong>https: </strong>
+                <input name="https" type="checkbox" <?php if($sab['https']) echo "checked"; ?> value="true" />
                 </td>
             </tr>
             <tr>
             	<td>
                 <strong>Server:</strong>
-                <input type="text" name="sabserver" value="<?php echo $sab['server']; ?>" />
+                <input type="text" name="url" value="<?php echo $sab['server']; ?>" />
                 </td>
                 <td>
                 <strong>Port:</strong>
-                <input type="text" name="sabport" value="<?php echo $sab['port']; ?>" />
+                <input type="text" name="port" value="<?php echo $sab['port']; ?>" />
                 </td>
             </tr>
             <tr>
@@ -67,7 +71,7 @@
                 </td>
                 <td>
                 <strong>Category:</strong>
-                <input type="text" name="apikey" value="<?php echo $sab['category']; ?>" />
+                <input type="text" name="cat" value="<?php echo $sab['category']; ?>" />
                 </td>
             </tr>
             <tr>
@@ -82,31 +86,32 @@
         <h4>Email Notification</h4>
         <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
         <input type="hidden" name="t" value="emailnotification" />
+        <input type="hidden" name="method" value="edit" />
         <table>
         	<tr>
             	<td>
                 <strong>Enabled: </strong>
-                <input type="checkbox" <?php if($conf->email['enabled']) echo "checked"; ?> value="true" />
+                <input name="enabled" type="checkbox" <?php if($conf->email['enabled']) echo "checked"; ?> value="true" />
                 </td>
             </tr>
             <tr>
             	<td>
                 <strong>Recieving address:</strong>
-                <input type="text" name="sabserver" value="<?php echo $conf->email['address']; ?>" />
+                <input type="text" name="email" value="<?php echo $conf->email['address']; ?>" />
                 </td>
                 <td>
                 <strong>Use smtp:</strong>
-                <input type="checkbox" <?php if($conf->email['smtp']) echo "checked"; ?> value="true" />
+                <input name="https" type="checkbox" <?php if($conf->email['smtp']) echo "checked"; ?> value="true" />
                 </td>
             </tr>
             <tr>
             	<td>
                 <strong>SMTP server:</strong>
-                <input type="text" name="sabserver" value="<?php echo $conf->email['smtpserver']; ?>" />
+                <input type="text" name="url" value="<?php echo $conf->email['smtpserver']; ?>" />
                 </td>
                 <td>
                 <strong>SMTP port:</strong>
-                <input type="checkbox" <?php if($conf->email['smtpport']) echo "checked"; ?> value="true" />
+                <input type="text" name="port" value="<?php echo $conf->email['smtpport']; ?>" />
                 </td>
             </tr>
             <tr>
@@ -137,7 +142,7 @@
                         <input type="text" name="name" value="<?php echo $inx->getName(); ?>" />
                         </td>
                         <td>
-                        <strong>Enabled: </strong><input type="checkbox" <?php if($inx->isEnabled()) echo "checked"; ?> value="true" />
+                        <strong>Enabled: </strong><input name="enabled" type="checkbox" <?php if($inx->isEnabled()) echo "checked"; ?> value="true" />
                         </td>
                     </tr>
                     <tr>
@@ -180,7 +185,7 @@
                 <input type="text" name="name" value="" />
                 </td>
                 <td>
-                <strong>Enabled: </strong><input type="checkbox" value="true" />
+                <strong>Enabled: </strong><input name="enabled" type="checkbox" value="true" />
                 </td>
             </tr>
             <tr>
