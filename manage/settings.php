@@ -128,6 +128,7 @@
                 
                 <form method="post" action="../conf/changeconf.php" enctype="multipart/form-data">
                 <input type="hidden" name="t" value="indexsite" />
+                <input type="hidden" name="method" value="edit" />
                 <input type="hidden" name="index" value="<?php echo $inx->getId(); ?>" />
                 <table>
                     <tr>
