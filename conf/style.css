@@ -45,16 +45,6 @@ a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 	padding:10px;
 }
 
-#info{
-	position:fixed;
-	top:5px;
-	left:5px;
-	width:300px;
-	overflow:auto;
-	border:1px solid #fff;
-	padding:10px;
-	word-wrap:break-word;
-}
 .outerHead{
 	position:fixed;
 	z-index:1;
