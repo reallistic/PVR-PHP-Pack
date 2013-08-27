@@ -8,7 +8,7 @@ class INDEXSITE{
 	private $enabled;
 	private $id;
 	
-	public function __construct($n,$a,$u, $i){
+	public function __construct($n,$a,$u, $i, $e){
 		$this->category = array();
 		array_push($this->category, INDEXSITE::$default_cat);
 		if(substr($u,strlen($u)-1) != "/"){
@@ -17,7 +17,7 @@ class INDEXSITE{
 		$this->name = $n;
 		$this->apikey = $a;
 		$this->url = $u;
-		$this->enabled = true;
+		$this->enabled = $e;
 		$this->id = $i;
 	}
 	public static function withID($id){
@@ -320,7 +320,8 @@ class CONFIG{
 		"apikey" =>"",
 		"port" => "8080",
 		"category" => "music",
-		"enabled" => true
+		"enabled" => true,
+		"https" => false
 	);
 	
 	public $info;
@@ -328,41 +329,70 @@ class CONFIG{
 	private $file = "../conf/config.db";
 	
 	public function __construct(){
-		$flag=0;
-		if(file_exists($this->file)){			
-			$conf = unserialize(file_get_contents($this->file));
+		if(file_exists($this->file)){
+			$conf = file_get_contents($this->file);
+			$conf = unserialize($conf);
 			if($conf instanceof CONFIG){
-				return $conf;
+				$s= $conf->getSab();
+				$this->sab["server"] = $s["server"];
+				$this->sab["apikey"] = $s["apikey"];
+				$this->sab["port"] = $s["port"];
+				$this->sab["category"] = $s["category"];
+				$this->sab["enabled"] = $s["enabled"];
+				$this->sab["https"] = $s["https"];
+				$this->info = array(true, "config loaded ");
 			}
 			else{
-				$flag=1;
 				unlink($this->file);
+				$this->info = array(true,"initialized config with default settings");
 			}
 		}
-		
-		$fp = fopen($this->file, 'w+');
-		if(flock($fp, LOCK_EX)) {
-			fwrite($fp, serialize($this));
-			flock($fp, LOCK_UN);
-			$this->info = array(true, "config saved ".$flag);
-			return $this;
+		else{
+			$this->info = array(true,"initialized config with default settings");
 		}
-		else {
-			$this->info = array(false, "file cannot be locked");
-		}
-		$this->info = array(true,"initialized config with default settings");
 	}
 	
-	public function saveConfig($s){
+	public function saveSabConfig($s){
+		if(substr($s["server"],strlen($s["server"])-1) == "/"){
+			$s["server"]=substr($s["server"],0,strlen($s["server"])-1);
+		}
 		$this->sab["server"] = $s["server"];
 		$this->sab["apikey"] = $s["apikey"];
 		$this->sab["port"] = $s["port"];
 		$this->sab["category"] = $s["category"];
 		$this->sab["enabled"] = $s["enabled"];
+		$this->sab["https"] = $s["https"];
+		
+		$fp = fopen($this->file, 'w+');
+		if(flock($fp, LOCK_EX)) {
+			fwrite($fp, serialize($this));
+			flock($fp, LOCK_UN);
+			$this->info = array(true, "config saved 2");
+		}
+		else {
+			$this->info = array(false, "file cannot be locked");
+		}
 	}
 	
 	public function getSab(){
 		return $this->sab;
+	}
+	
+	public function sendToSab($l, $n){
+		if($this->sab["https"]){
+			$url = "https://";
+		}
+		else{
+			$url = "http://";
+		}
+		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=addurl&name=".$l."&nzbname=".$n."&apikey=".$this->sab["apikey"];
+		
+		return $url;
+		/*$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		$resp = curl_exec($ch);
+		curl_close($ch);*/
 	}
 	
 }
