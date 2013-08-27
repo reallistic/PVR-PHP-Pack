@@ -10,7 +10,10 @@ class INDEXSITE{
 	
 	public function __construct($n,$a,$u, $i){
 		$this->category = array();
-		array_push($this->category, $default_cat);
+		array_push($this->category, INDEXSITE::$default_cat);
+		if(substr($u,strlen($u)-1) != "/"){
+			$u=$u."/";
+		}
 		$this->name = $n;
 		$this->apikey = $a;
 		$this->url = $u;
@@ -64,7 +67,20 @@ class INDEXSITE{
 	
 	public function makeSearch($q){
 		$cats = implode(', ', $this->category);
-		return $this->url."?apikey=".$this->apikey."cat=".$cats."&extended=1"."&t=search&q=".$q;
+		if(is_array($q)){
+			$alb="";
+			$art="";
+			if($q['album'] != ""){
+				$alb = "&album=".$q['album'];
+			}
+			if($q['artist'] != ""){
+				$art = "&artist=".$q['artist'];
+			}
+			return $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=music".$art.$alb;
+		}
+		else{
+			return $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=search&q=".$q;
+		}
 	}
 	
 	public function saveSite(){

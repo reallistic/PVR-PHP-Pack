@@ -1,6 +1,6 @@
 <?php
 session_start();
-//ob_start();
+ob_start();
 $config = false;
 $indexers = false;
 if(is_file("../conf/config.php")){
@@ -22,7 +22,7 @@ if(is_file("../conf/config.php")){
 			switch($t){
 				case "indexsite":
 					if($mthd == "add"){
-						echo "apikey is ".$a;
+						//echo "apikey is ".$a;
 						$is = new INDEXSITE($n, $a, $u, $ind);
 						$is->saveSite();
 					}
@@ -30,11 +30,19 @@ if(is_file("../conf/config.php")){
 						$is = INDEXSITE::withID($ind);
 						if($is instanceof INDEXSITE){
 							$_SESSION['response']=$is->delSite();
-							echo "in delete<br>";
-							print_r($_SESSION['response']);
+							//echo "in delete<br>";
+							//print_r($_SESSION['response']);
 						}
 						else{
-							print_r($is);
+							//print_r($is);
+						}
+					}
+					elseif($mthd == "edit"){
+						$is = INDEXSITE::withID($ind);
+						if($is instanceof INDEXSITE){
+							$_SESSION['response']=$is->delSite();
+							$is = new INDEXSITE($n, $a, $u, $ind);
+							$is->saveSite();
 						}
 					}
 				break;
@@ -68,7 +76,7 @@ if(is_file("../conf/config.php")){
 		$error = true;
 	}
 }
-//header("location: ../manage/");
-//ob_end_clean();
+header("location: ../manage/");
+ob_end_clean();
 exit;
 ?>
