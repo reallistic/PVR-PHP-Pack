@@ -33,6 +33,10 @@ if(is_file("../conf/config.php")){
 					$indexersprop = true; //check for indexsites class was good
 				}
 			}
+			
+			$conf = new CONFIG;
+			$sab = $conf->getSab();
+			
 			$error = false;
 		}
 	}

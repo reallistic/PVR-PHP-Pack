@@ -298,6 +298,57 @@ class AUTH{
 	}
 }
 
+class CONFIG{
+	private $sab = array(
+		"server" => "0.0.0.0",
+		"apikey" =>"",
+		"port" => "8080",
+		"category" => "music",
+		"enabled" => true
+	);
+	
+	private $file = "../conf/config.db";
+	
+	public function __construct(){
+		$flag=0;
+		if(file_exists($this->file)){			
+			$conf = unserialize(file_get_contents($this->file));
+			if($conf instanceof CONFIG){
+				return $conf;
+			}
+			else{
+				$flag=1;
+				unlink($this->file);
+			}
+		}
+		
+		$fp = fopen($this->file, 'w+');
+		if(flock($fp, LOCK_EX)) {
+			fwrite($fp, serialize($this));
+			flock($fp, LOCK_UN);
+			$this->info = array(true, "config saved ".$flag);
+			return $this;
+		}
+		else {
+			$this->info = array(false, "file cannot be locked");
+		}
+		$this->info = array(true,"initialized config with default settings");
+	}
+	
+	public function saveConfig($s){
+		$this->sab["server"] = $s["server"];
+		$this->sab["apikey"] = $s["apikey"];
+		$this->sab["port"] = $s["port"];
+		$this->sab["category"] = $s["category"];
+		$this->sab["enabled"] = $s["enabled"];
+	}
+	
+	public function getSab(){
+		return $this->sab;
+	}
+	
+}
+
 class SEARCHRESULT{
 	private $link;
 	private $title;

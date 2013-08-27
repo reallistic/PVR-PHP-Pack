@@ -35,22 +35,28 @@
         <input type="hidden" name="t" value="sabnzbd" />
         <table>
         	<tr>
-            	<td>
-                <strong>Enabled: </strong><input type="checkbox" <?php if($conf->sab['enabled']) echo "checked"; ?> value="true" />
-                </td>
-                 <td>
-                <strong>ApiKey:</strong>
-                <input type="text" name="apikey" value="<?php echo $conf->sab['apikey']; ?>" />
+            	<td colspan="2">
+                <strong>Enabled: </strong><input type="checkbox" <?php if($sab['enabled']) echo "checked"; ?> value="true" />
                 </td>
             </tr>
             <tr>
             	<td>
                 <strong>Server:</strong>
-                <input type="text" name="sabserver" value="<?php echo $conf->sab['server']; ?>" />
+                <input type="text" name="sabserver" value="<?php echo $sab['server']; ?>" />
                 </td>
                 <td>
                 <strong>Port:</strong>
-                <input type="text" name="sabport" value="<?php echo $conf->sab['port']; ?>" />
+                <input type="text" name="sabport" value="<?php echo $sab['port']; ?>" />
+                </td>
+            </tr>
+            <tr>
+            	<td>
+                <strong>ApiKey:</strong>
+                <input type="text" name="apikey" value="<?php echo $sab['apikey']; ?>" />
+                </td>
+                <td>
+                <strong>Category:</strong>
+                <input type="text" name="apikey" value="<?php echo $sab['category']; ?>" />
                 </td>
             </tr>
             <tr>
