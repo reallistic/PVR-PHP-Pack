@@ -8,7 +8,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [INFO]: $text");
+			fwrite($fp, date("d/m/y i:i:s.u a", time())." [INFO]: $text\r\n");
 			fclose($fp);
 		}
 	}
@@ -18,7 +18,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [WARN]: $text");
+			fwrite($fp, date("d/m/y i:i:s.u a", time())." [WARN]: $text\r\n");
 			fclose($fp);
 		}
 	}
@@ -28,7 +28,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [ERROR]: $text");
+			fwrite($fp, date("d/m/y i:i:s.u a", time())." [ERROR]: $text\r\n");
 			fclose($fp);
 		}
 	}

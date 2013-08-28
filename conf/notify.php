@@ -2,6 +2,8 @@
 session_start();
 ob_start();
 require_once("../bootstrap.php");
+$fnm = explode("/",__FILE__);
+$fnm = $fnm[-1];
 if(class_exists(CONFIG)){
 	if(isset($_REQUEST['link']) && isset($_REQUEST['name']) && isset($_REQUEST['method'])){
 		$l = urlencode($_REQUEST['link']);
@@ -16,11 +18,13 @@ if(class_exists(CONFIG)){
 			echo $conf->sendToMail($l, $n);
 		}
 		else{
-			$_SESSION['response']="No Method";
+			LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
+			header("location: logout.php");
 		}
 	}
 	else{
-		$_SESSION['response']="Error";
+		LOG::error(__FILE__." Line[".__LINE__."]"." AUTH|SCRIPT attempt to access a script without permission");
+		header("location: logout.php");
 	}
 }
 $url = $root.CONFIG::$REQ;

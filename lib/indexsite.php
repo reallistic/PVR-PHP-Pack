@@ -1,4 +1,6 @@
 <?php
+$fnm = explode("/",__FILE__);
+$fnm = $fnm[-1];
 class INDEXSITE{
 	private $name;
 	private $apikey;
@@ -22,7 +24,7 @@ class INDEXSITE{
 		$this->id = $i;
 	}
 	public static function withID($id){
-		global $sroot;
+		global $sroot, $fnm;
 		
 		$response = array();
 		if(is_file($sroot.CONFIG::$DBS.INDEXSITE::$dbfile)){
@@ -50,8 +52,10 @@ class INDEXSITE{
 		else{
 			array_push($response, "indexsite db not found");
 		}
+		$response = implode(",",$response);
+		LOG::info(__FILE__." Line[".__LINE__."]".$response);
+		return $response;
 		
-		return implode(",",$response);
 	}
 	public function addCat($c){
 		if(in_array($c, $this->category, true) === false){
@@ -69,6 +73,8 @@ class INDEXSITE{
 	}
 	
 	public function makeSearch($q){
+		global $fnm;
+		
 		$cats = implode(', ', $this->category);
 		if(is_array($q)){
 			$alb="";
@@ -79,15 +85,18 @@ class INDEXSITE{
 			if($q['artist'] != ""){
 				$art = "&artist=".$q['artist'];
 			}
-			return $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=music".$art.$alb;
+			
+			$response = $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=music".$art.$alb;
 		}
 		else{
-			return $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=search&q=".$q;
+			$response = $this->url."api?apikey=".$this->apikey."&cat=".$cats."&extended=1"."&t=search&q=".$q;
 		}
+		LOG::info(__FILE__." Line[".__LINE__."]".$response);
+		return $response;
 	}
 	
 	public function saveSite(){
-		global $sroot;
+		global $sroot, $fnm;
 		
 		if(is_file($sroot.CONFIG::$DBS.INDEXSITE::$dbfile)){
 			$inxs = file_get_contents($sroot.CONFIG::$DBS.INDEXSITE::$dbfile);
@@ -104,9 +113,11 @@ class INDEXSITE{
 		if(flock($fp, LOCK_EX)) {
 			fwrite($fp, serialize($inxs));
 			flock($fp, LOCK_UN);
-			return array(true, "site ".$this->name." saved");
+			LOG::info(__FILE__." Line[".__LINE__."]"." indexsite ".$this->name." saved");
+			return array(true, "indexsite ".$this->name." saved");
 		}
 		else {
+			LOG::error(__FILE__." Line[".__LINE__."]"." file cannot be locked");
 			return array(false, "file cannot be locked");
 		}
 		
@@ -114,7 +125,7 @@ class INDEXSITE{
 	}
 	
 	public function delSite(){
-		global $sroot;
+		global $sroot, $fnm;
 		
 		$response = array();
 		if(is_file($sroot.CONFIG::$DBS.INDEXSITE::$dbfile)){
@@ -175,7 +186,9 @@ class INDEXSITE{
 			array_push($response, "indexsite db not found");
 		}
 		
-		return implode(",",$response);
+		$response = implode(",",$response);
+		LOG::info(__FILE__." Line[".__LINE__."]".$response);
+		return $response;
 	}
 	
 	public function isEqual($obj){
