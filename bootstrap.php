@@ -7,7 +7,6 @@
 	
 	//CHANGE ME: Path to config.php
 	$CONFIGFILE = "lib/config.php";
-	try{
 	require($sroot.$CONFIGFILE);
 	
 	if(class_exists(CONFIG)){
@@ -19,9 +18,5 @@
 				}
 			}
 		}
-	}
-	}
-	catch(Exception $e) {
-		echo $e;
 	}
 ?>
