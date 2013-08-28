@@ -1,4 +1,4 @@
-plexcloud-music-search
+PVR-PHP-Pack
 ======================
 
 PHP based application to allow management of music via nzbs.
