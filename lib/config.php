@@ -69,6 +69,7 @@ class CONFIG{
 		if(flock($fp, LOCK_EX)) {
 			fwrite($fp, serialize($this));
 			flock($fp, LOCK_UN);
+			fclose($fp);
 			$this->info = array(true, "config saved 2");
 		}
 		else {

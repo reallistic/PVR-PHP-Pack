@@ -85,11 +85,13 @@ class AUTH{
 			if(flock($fp, LOCK_EX)) {
 				fwrite($fp, serialize($this));
 				flock($fp, LOCK_UN);
+				
 				return array(true, "Credentials saved ".$this->username);
 			}
 			else {
 				return array(false, "file cannot be locked");
 			}
+			fclose($fp);
 		}
 		else {
 			return array(false, "An error occurred1");
@@ -110,12 +112,13 @@ class AUTH{
 			$fp = fopen($sroot.CONFIG::$DBS.$this->dbfile, 'w+');
 			if(flock($fp, LOCK_EX)) {
 				fwrite($fp, serialize($this));
-				flock($fp, LOCK_UN);
+				flock($fp, LOCK_UN);				
 				return "Credentials saved ".$this->username;
 			}
 			else {
 				return "file cannot be locked";
 			}
+			fclose($fp);
 		}
 		else {
 			return "An error occurred1";

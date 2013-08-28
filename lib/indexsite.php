@@ -158,6 +158,7 @@ class INDEXSITE{
 				else{
 					array_push($response, "failed saving ". count($savedsites) . " site(s). file cannot be locked");
 				}
+				fclose($fp);
 			}
 			elseif(count($inxs)==0 || count($savedsites) == 0 ) {
 				array_push($response, "either the index site db was curropt or no sites were saved");
