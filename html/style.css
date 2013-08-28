@@ -1,0 +1,93 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, p {
+	margin:0;
+	padding:0;
+	border:0;
+	outline: none;
+	text-decoration:none;
+}
+
+/***** CUSTOM FONT *****/
+
+@font-face {
+	font-family: "Logobloqo2";
+	src: url('Logobloqo2.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+table{
+	width:100%;
+}
+td{
+	vertical-align:text-top;
+}
+body{
+	background-color:#DDD;
+	font-size:12px;
+}
+a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
+	font-size:11px;
+}
+.mainCont{
+	position:relative;
+	margin-top:40px;
+}
+
+.innerCont{
+	position:relative;
+	width: 880px;
+	margin:0px auto 0px auto;
+	background-color:#FFF;
+	box-shadow: 0px 8px 16px 1px #888888;
+	padding:10px;
+}
+
+.outerHead{
+	position:fixed;
+	z-index:1;
+	top:0px;
+	text-align:center;
+	width:100%;
+}
+.head{
+	position:relative;	
+	width: 900px;
+	margin:0px auto 0px auto;
+	box-shadow: 0px 0px 18px 1px #888888;
+	text-align:center;
+	background-color:#EAEAEA;
+	font-size:20px;
+	font-weight:bold;
+	font-family:"Logobloqo2", Arial;
+	height: 40px;
+	line-height:40px;
+	/* fallback */
+	background-color: #EAEAEA;
+	
+	/* Safari 4-5, Chrome 1-9 */
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EAEAEA), to(#FFFFFF));
+	
+	/* Safari 5.1, Chrome 10+ */
+	background: -webkit-linear-gradient(top, #FFFFFF, #EAEAEA);
+	
+	/* Firefox 3.6+ */
+	background: -moz-linear-gradient(top, #FFFFFF, #EAEAEA);
+	
+	/* IE 10 */
+	background: -ms-linear-gradient(top, #FFFFFF, #EAEAEA);
+	
+	/* Opera 11.10+ */
+	background: -o-linear-gradient(top, #FFFFFF, #EAEAEA);
+}
+
+.subhead{
+	position:relative;
+	width:auto;
+	height:40px;
+	float:left;
+	padding-right:20px;
+	line-height:40px;
+}
