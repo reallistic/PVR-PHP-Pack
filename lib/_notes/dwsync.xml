@@ -4,8 +4,9 @@
 <file name="config.php" server="rxse.co//var/www/webroot/" local="130221872873361911" remote="130221872770000000" />
 <file name="indexsite.php" server="rxse.co//var/www/webroot/" local="130221875920436194" remote="130221875820000000" />
 <file name="searchresult.php" server="rxse.co//var/www/webroot/" local="130221770303085227" remote="130221829470000000" />
-<file name="auth.php" server="rxse.co//var/www/webroot/ask/" local="130221859698808370" remote="130221878140000000" />
-<file name="config.php" server="rxse.co//var/www/webroot/ask/" local="130221900610000000" remote="130221900510000000" />
-<file name="indexsite.php" server="rxse.co//var/www/webroot/ask/" local="130221875920436194" remote="130221878140000000" />
+<file name="auth.php" server="rxse.co//var/www/webroot/ask/" local="130221938997475533" remote="130221939030000000" />
+<file name="config.php" server="rxse.co//var/www/webroot/ask/" local="130221938498917017" remote="130221938510000000" />
+<file name="indexsite.php" server="rxse.co//var/www/webroot/ask/" local="130221939314113643" remote="130221939360000000" />
 <file name="searchresult.php" server="rxse.co//var/www/webroot/ask/" local="130221770303085227" remote="130221878140000000" />
+<file name="log.php" server="rxse.co//var/www/webroot/ask/" local="130221982719066264" remote="130221983760000000" />
 </dwsync>
