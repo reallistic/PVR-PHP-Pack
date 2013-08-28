@@ -48,7 +48,7 @@ class CONFIG{
 		else{
 			$this->info = array(true,"initialized config with default settings0<br>");
 		}
-		//$_SESSION['response'] = $this->info[1];
+		LOG::info(__FILE__." Line[".__LINE__."]".$this->info[1]);
 	}
 	
 	public function saveSabConfig($s){
@@ -70,10 +70,12 @@ class CONFIG{
 			fwrite($fp, serialize($this));
 			flock($fp, LOCK_UN);
 			fclose($fp);
-			$this->info = array(true, "config saved 2");
+			$this->info = array(true, "config saved");
+			LOG::info(__FILE__." Line[".__LINE__."]"."config saved");
 		}
 		else {
 			$this->info = array(false, "file cannot be locked");
+			LOG::error(__FILE__." Line[".__LINE__."]"."file cannot be locked");
 		}
 		$_SESSION['response'] = $this->info[1];
 	}
@@ -90,6 +92,7 @@ class CONFIG{
 			$url = "http://";
 		}
 		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=addurl&name=".$l."&nzbname=".$n."&apikey=".$this->sab["apikey"]."&cat=".$this->sab["category"];
+		LOG::info(__FILE__." Line[".__LINE__."]"."sending nzb to sab - ".$url);
 		$this->info= array(true, $url);
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

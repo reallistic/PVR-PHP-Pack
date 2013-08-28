@@ -20,11 +20,12 @@ if(class_exists(CONFIG)){
 				'album'=> CONFIG::escape_query($_REQUEST['album']),
 				'artist'=> CONFIG::escape_query($_REQUEST['artist'])
 		);
-		//header("location: /request/");
+		LOG::info(__FILE__." Line[".__LINE__."]"."searching for artist/album ".var_export($q));
 	}
 	elseif(isset($_REQUEST['q']) && $_REQUEST['q'] != ""){
 		$query = true;
 		$q = CONFIG::escape_query($_REQUEST['q']);
+		LOG::info(__FILE__." Line[".__LINE__."]"."general search for ".$q);
 	}
 	
 	if($query === true){
@@ -58,7 +59,10 @@ if(class_exists(CONFIG)){
 							array_push($filter, strtolower(CONFIG::escape_query($item->title)));
 						}
 				   endforeach;
+				   
+				   LOG::info(__FILE__." Line[".__LINE__."]"."found ".count($xml->channel->item)." results with site ".$indexsite->getName());
 				}
+				
 				
 			}
 			if (count($results) >0){
@@ -164,14 +168,17 @@ if(class_exists(CONFIG)){
 		$notify=true;
 	}
 	if($config === false){
+		LOG::error(__FILE__." Line[".__LINE__."]"."config.php missing");
 		echo "<h3>Improper installation. Missing config.php</h3>";
 		$notify=true;
 	}
 	elseif($indexers === false){
+		LOG::warn(__FILE__." Line[".__LINE__."]"."couldn't find any indexers");
 		echo "Please configure at least one index site<a class=\"button\" href=\"". $root.CONFIG::$MGMT."\" >Manage</a>";
 		$notify=true;
 	}
 	elseif($indexersprop === false){
+		LOG::warn(__FILE__." Line[".__LINE__."]"."couldn't find any proper indexers");
 		echo "index site db curropted please repair<a class=\"button\" href=\"". $root.CONFIG::$MGMT."\" >Manage</a>";
 		$notify=true;
 	}
