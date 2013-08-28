@@ -5,7 +5,7 @@
 	$root =$root."/";
 	$sroot = dirname(__FILE__)."/";
 	
-	//EDITME: Path to config.php
+	//CHANGE ME: Path to config.php
 	$CONFIGFILE = "lib/config.php";
 	try{
 	require($sroot.$CONFIGFILE);
