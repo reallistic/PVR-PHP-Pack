@@ -20,6 +20,9 @@ class CONFIG{
 	public static $CHSCRIPT = "changeconf.php";
 	public static $NTYSCRIPT = "notify.php";
 	public static $LGOUTSCRIPT = "logout.php";
+	public static $LOGSTOKEEP = 5; //CHANGE ME: number of logs to keep
+	public static $MAXLOGSIZE = 2097152; //CHANGE ME: max log file size (2MB)
+	private $numlogs = 0;
 	
 	public function __construct(){
 		global $sroot;
