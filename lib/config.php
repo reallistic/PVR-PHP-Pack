@@ -15,14 +15,14 @@ class CONFIG{
 	public static $CLASSES = "lib/";
 	public static $STYLE = "html/style.css";
 	public static $DBS = "db/";
+	public static $LOGS = "log/";
 	public static $REQ = "";
 	public static $MGMT = "manage/";
 	public static $CHSCRIPT = "changeconf.php";
 	public static $NTYSCRIPT = "notify.php";
 	public static $LGOUTSCRIPT = "logout.php";
 	public static $LOGSTOKEEP = 5; //CHANGE ME: number of logs to keep
-	public static $MAXLOGSIZE = 2097152; //CHANGE ME: max log file size (2MB)
-	private $numlogs = 0;
+	public static $MAXLOGSIZE = 2097152; //CHANGE ME: max log file size (2MB)	
 	
 	public function __construct(){
 		global $sroot;
