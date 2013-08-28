@@ -168,11 +168,11 @@ if(class_exists(CONFIG)){
 		$notify=true;
 	}
 	elseif($indexers === false){
-		echo "Please configure at least one index site<a class=\"button\" href=\"../manage/\" >Manage</a>";
+		echo "Please configure at least one index site<a class=\"button\" href=\"". $root.CONFIG::$MGMT."\" >Manage</a>";
 		$notify=true;
 	}
 	elseif($indexersprop === false){
-		echo "index site db curropted please repair<a class=\"button\" href=\"../manage/\" >Manage</a>";
+		echo "index site db curropted please repair<a class=\"button\" href=\"". $root.CONFIG::$MGMT."\" >Manage</a>";
 		$notify=true;
 	}
 	
