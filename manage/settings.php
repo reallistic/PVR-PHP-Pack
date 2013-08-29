@@ -13,6 +13,9 @@
     	<a class="button" href="<?php echo $root.CONFIG::$REQ; ?>">Request</a>
     </div>
     <div class="subhead">
+    	<a class="button" href="<?php echo $root.CONFIG::$LOGS; ?>">Log</a>
+    </div>
+    <div class="subhead">
     	<a class="button" href="<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT; ?>">Logout</a>
     </div>
     <div style="clear:both"></div>
