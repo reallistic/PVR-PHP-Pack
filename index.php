@@ -134,7 +134,28 @@ if(class_exists(CONFIG)){
             <div id="results">
             <?php
                 if($response === true){
-                    /*echo implode("<br>",$results);*/
+					require "lib/lastfm/lastfm.api.php";
+					 
+					// set api key
+					
+					CallerFactory::getDefaultCaller()->setApiKey("24e80eb914d9be7c19392358d24a39dc");
+					 
+					// search for the Coldplay band
+					$artistName = $q['artist'];
+					$limit = 1;
+					$results = Artist::search($artistName, $limit);
+					 
+					echo "<ul>";
+					while ($artist = $results->current()) {
+						echo "<li><div>";
+						echo "Artist URL: " . $artist->getUrl() . "<br>";
+						echo '<img src="' . $artist->getImage(4) . '">';
+						echo "</div></li>";
+					 
+						$artist = $results->next();
+					}
+					echo "</ul>";
+                    /*
 					$i=0;
                    foreach ($results as $item): ?>
                         <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$NTYSCRIPT; ?>">
@@ -147,7 +168,7 @@ if(class_exists(CONFIG)){
                         </form>
                         <?php
 						$i++;
-                   endforeach;
+                   endforeach;*/
                 }
                 elseif($query === false){
                     echo "<h3>Enter values above and click search</h3>";
