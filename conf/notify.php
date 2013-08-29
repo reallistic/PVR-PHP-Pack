@@ -19,12 +19,16 @@ if(class_exists(CONFIG)){
 		}
 		else{
 			LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
-			header("location: logout.php");
+			$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+			header("location: $url");
+
 		}
 	}
 	else{
 		LOG::error(__FILE__." Line[".__LINE__."]"." AUTH|SCRIPT attempt to access a script without permission");
-		header("location: logout.php");
+		$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+		header("location: $url");
+
 	}
 }
 $url = $root.CONFIG::$REQ;

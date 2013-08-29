@@ -24,7 +24,9 @@ if(class_exists(CONFIG)){
 	
 	if(isset($at)){
 		if(!$at->checkToken() && $at->info[1] !="confirm"){
-			header("location: logout.php");
+			$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+			header("location: $url");
+
 		}
 		elseif($at->checkToken()){
 			if(is_file($sroot.CONFIG::$DBS.INDEXSITE::$dbfile)){

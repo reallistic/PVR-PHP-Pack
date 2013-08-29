@@ -12,7 +12,8 @@ if(class_exists(CONFIG)){
 		$at = unserialize($_SESSION['authtoken']);
 		if(!$at->checkToken() || !isset($_POST['t'])){
 			LOG::error(__FILE__." Line[".__LINE__."]"." AUTH|SCRIPT attempt to access a script without permission");
-			header("location: logout.php");
+			$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+			header("location: $url");
 		}
 		else{
 			$t = CONFIG::escape_query($_POST['t']);
@@ -60,7 +61,9 @@ if(class_exists(CONFIG)){
 					}
 					else{
 						LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
-						header("location: logout.php");
+						$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+						header("location: $url");
+
 					}
 				break;
 				case "sabnzbd":
@@ -79,7 +82,9 @@ if(class_exists(CONFIG)){
 					}
 					else{
 						LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
-						header("location: logout.php");
+						$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+						header("location: $url");
+
 					}
 				break;
 				case "credentials":
@@ -90,19 +95,25 @@ if(class_exists(CONFIG)){
 					}
 					else{
 						LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
-						header("location: logout.php");
+						$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+						header("location: $url");
+
 					}
 				break;
 				default:
 					LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
-					header("location: logout.php");
+					$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+					header("location: $url");
+
 				break;
 			}
 		}
 	}
 	else{
 		LOG::error(__FILE__." Line[".__LINE__."]"." AUTH|SCRIPT attempt to access a script without permission");
-		header("location: logout.php");
+		$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+		header("location: $url");
+
 	}
 }
 $url = $root.CONFIG::$MGMT;
