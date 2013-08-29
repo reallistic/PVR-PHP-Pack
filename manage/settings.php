@@ -1,6 +1,6 @@
 <div class="outerHead">
 	<div class="head">
-    	PlexCloud - Music made easy
+    	<?php echo CONFIG::$APPNAME; ?>
     </div>
 </div>
 <div class="mainCont">

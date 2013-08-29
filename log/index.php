@@ -32,7 +32,7 @@ else{
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Plexcloud - Music | Logs</title>
+<title><?php echo CONFIG::$APPNAME; ?> | Logs</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
@@ -51,7 +51,7 @@ else{
 <body>
 <div class="outerHead">
 	<div class="head">
-    	PlexCloud - Music made easy
+    	<?php echo CONFIG::$APPNAME; ?>
     </div>
 </div>
 <div class="mainCont">

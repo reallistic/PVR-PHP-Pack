@@ -22,7 +22,8 @@ class CONFIG{
 	public static $NTYSCRIPT = "notify.php";
 	public static $LGOUTSCRIPT = "logout.php";
 	public static $LOGSTOKEEP = 5; //CHANGE ME: number of logs to keep
-	public static $MAXLOGSIZE = 2097152; //CHANGE ME: max log file size (2MB)	
+	public static $MAXLOGSIZE = 2097152; //CHANGE ME: max log file size (2MB)
+	public static $APPNAME = "PVR {PHP}"; //CHANGE ME: Will be displayed in title and headers	
 	
 	public function __construct(){
 		global $sroot;
