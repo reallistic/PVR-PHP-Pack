@@ -13,7 +13,8 @@
 		if ($handle = opendir($sroot.CONFIG::$CLASSES)) {
 			while (false !== ($file = readdir($handle))) {
 				if(is_file($sroot.CONFIG::$CLASSES.$file)
-					&& $sroot.CONFIG::$CLASSES.$file != $sroot.$CONFIGFILE){
+					&& $sroot.CONFIG::$CLASSES.$file != $sroot.$CONFIGFILE
+					&& $file != ".htaccess"){
 					require($sroot.CONFIG::$CLASSES.$file);
 				}
 			}
