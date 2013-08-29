@@ -75,8 +75,9 @@ else{
     <hr />
     <div>
     <?php
-		$i=1;
+		$i=0;
 		foreach(LOG::getLogs() as $log):
+			$i++;
 			if($i % 2 == 1){ ?>
 				<div class="log-alternate">
                 <?php echo $log; ?>
@@ -86,9 +87,11 @@ else{
 				<div class="log">
                 <?php echo $log; ?>
                 </div>
-	  <?php }
-	  		$i++;
+	  <?php }	  		
 		endforeach;
+		if($i===0){
+			echo "<div class=\"log\">No Logs</div>";
+		}
 	?>
     </div>
 </div>
