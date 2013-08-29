@@ -8,7 +8,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [INFO]: $text\r\n");
+			fwrite($fp, date("m/d/Y h:i:s a", time())." [INFO]: $text\r\n");
 			fclose($fp);
 		}
 	}
@@ -18,7 +18,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [WARN]: $text\r\n");
+			fwrite($fp, date("m/d/Y h:i:s a", time())." [WARN]: $text\r\n");
 			fclose($fp);
 		}
 	}
@@ -28,7 +28,7 @@ class LOG{
 		
 		self::checkFileSize($text);
 		if(false !== ($fp = fopen($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME, 'a'))){
-			fwrite($fp, date("d/m/y i:i:s.u a", time())." [ERROR]: $text\r\n");
+			fwrite($fp, date("m/d/Y h:i:s a", time())." [ERROR]: $text\r\n");
 			fclose($fp);
 		}
 	}
@@ -55,13 +55,22 @@ class LOG{
 		}
 	}
 	public static function getLogs(){
+		global $sroot;
+		
 		$logs = array();
-		if(file_exists($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME)){
-			
+		if(file_exists($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME)){		
+			//self::info(__FILE__." Line[".__LINE__."]"." looking for file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
+			if(is_file($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME)){
+				//self::info(__FILE__." Line[".__LINE__."]"." found file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
+				$filecont = file_get_contents($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
+				$logs = array_merge($logs,explode("\r\n",$filecont));
+			}	
 			for($i =1; $i<CONFIG::$LOGSTOKEEP; $i++){
+				//self::info(__FILE__." Line[".__LINE__."]"." looking for file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
 				if(is_file($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i)){
+					//self::info(__FILE__." Line[".__LINE__."]"." found file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
 					$filecont = file_get_contents($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
-					array_push($logs, explode("\r\n",$filecont));
+					$logs = array_merge($logs,explode("\r\n",$filecont));
 				}
 			}
 		}

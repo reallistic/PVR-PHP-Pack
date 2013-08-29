@@ -1,8 +1,6 @@
 <?php
 session_start();
 $config = false;
-$indexers = false;
-$indexersprop = false;
 require_once("../bootstrap.php");
 if(class_exists(CONFIG)){
 	$config = true;
@@ -76,15 +74,30 @@ else{
     <div>
     <?php
 		$i=0;
-		foreach(LOG::getLogs() as $log):
+		$logs = LOG::getLogs();
+		foreach($logs as $log):
 			$i++;
-			if($i % 2 == 1){ ?>
-				<div class="log-alternate">
+			if(count($logs) == $i)
+				break;
+
+			if (strpos($log,'[INFO]') !== false) {
+				$level = "log_info";
+			}
+			elseif (strpos($log,'[WARN]') !== false) {
+				$level = "log_warn";
+			}
+			elseif (strpos($log,'[ERROR]') !== false) {
+				$level = "log_error";
+			}
+			if($i % 2 == 1){ 
+				
+				?>
+				<div class="log-alternate <?php echo $level; ?>">
                 <?php echo $log; ?>
                 </div>
 	  <?php }
 			else{ ?>
-				<div class="log">
+				<div class="log <?php echo $level; ?>">
                 <?php echo $log; ?>
                 </div>
 	  <?php }	  		
@@ -107,10 +120,6 @@ else{
 	if($config === false){
 		$notify=true;
 		echo "<p>Improper installation. Missing config.php</p>";
-	}
-	if(isset($at) && $indexersprop === false){
-		$notify = true;
-		echo "<p>Please add an index site</p>";
 	}
 if($notify){ ?>
    	<script type="text/javascript">

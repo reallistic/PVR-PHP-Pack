@@ -91,3 +91,26 @@ a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 	padding-right:20px;
 	line-height:40px;
 }
+
+.log,.log-alternate{
+	color:#fff;
+	padding:10px;
+	font-size:13px;
+	margin-bottom:2px;
+}
+.log{
+	background-color:#444;
+}
+.log-alternate{
+	background-color:#888;
+}
+
+.log_info{
+	border:1px solid #000;
+}
+.log_warn{
+	border:1px solid #CF6;
+}
+.log_error{
+	border:1px solid #C00;
+}
