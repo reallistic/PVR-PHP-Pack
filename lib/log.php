@@ -54,6 +54,19 @@ class LOG{
 			}
 		}
 	}
+	public static function getLogs(){
+		$logs = array();
+		if(file_exists($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME)){
+			
+			for($i =1; $i<CONFIG::$LOGSTOKEEP; $i++){
+				if(is_file($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i)){
+					$filecont = file_get_contents($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
+					array_push($logs, explode("\r\n",$filecont));
+				}
+			}
+		}
+		return $logs;
+	}
 	private static function numLogs(){
 		global $sroot;
 		
