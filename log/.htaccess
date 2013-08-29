@@ -1,4 +1,9 @@
-<Files *>
+<Files .log*>
+	Order Deny,Allow
+	Deny From All
+	Allow From All
+</Files>
+<Files .log*>
 	Order Deny,Allow
 	Deny From All
 	Allow From 127.0.0.1
