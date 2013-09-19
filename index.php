@@ -29,6 +29,30 @@ if(class_exists(CONFIG)){
 	}
 	
 	if($query === true){
+		/*require "lib/lastfm/lastfm.api.php";
+					 
+		// set api key				
+		CallerFactory::getDefaultCaller()->setApiKey("24e80eb914d9be7c19392358d24a39dc");
+					 
+		// search for the Coldplay band
+		$artistName = $q['artist'];
+		$limit = 1;
+		$results = Artist::search($artistName, $limit);		
+		while ($artist = $results->current()) {
+			echo "<div>";
+			echo "<h3>" . $artist->getName() . "</h3>";
+			echo "<a href=\"" . $artist->getUrl() . "\" >LastFm - " .$artist->getName()."</a><br>";
+			//echo '<img src="' . $artist->getImage(4) . '">';
+			$albums = Artist::getTopAlbums($artist->getName());
+			echo "<ul>";
+			foreach ($albums as $album){
+				echo "<li>".$album->getName()."</li>";
+			}
+			echo "</ul>";
+			echo "</div>";
+		 
+			$artist = $results->next();
+		}*/
 		if($indexers === true && $indexersprop === true){
 			$results = array();
 			$filter=array();
@@ -77,13 +101,13 @@ if(class_exists(CONFIG)){
 <head>
 <meta charset="utf-8">
 <title><?php echo CONFIG::$APPNAME; ?> | Request</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet"></link>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/excite-bike/jquery-ui.min.css" rel="stylesheet"></link>
 <link href="<?php echo $root.CONFIG::$STYLE; ?>" rel="stylesheet" type="text/css"></link>
 <script type="text/javascript">
 	$(function() {
-		$( "input[type=submit], a.button, button" )
+		$( "input[type=button],input[type=submit], a.button, button" )
 		  .button();
 		$("button").click(function( event ) {
 			event.preventDefault();
@@ -96,6 +120,18 @@ if(class_exists(CONFIG)){
 		else{
 			$("#info").html("Please enter a value in one of the fields");
 		}
+	}
+	function ajaxSend(id){
+		$.ajax({
+			url:"<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$NTYSCRIPT; ?>",
+			data:$("form#"+id).serialize(),
+			type:"POST",
+			complete: function(jqXHR, status){
+				$("#info").html(status);
+				$("#info").show();
+				$( "#info" ).dialog();
+			}
+		});
 	}
 </script>
 </head>
@@ -114,17 +150,20 @@ if(class_exists(CONFIG)){
         <div class="subhead">
             <a class="button" href="<?php echo $root.CONFIG::$MGMT; ?>">Manage</a>
         </div>
+        <div class="subhead">
+            <a class="button" href="<?php echo $root.CONFIG::$QUEUE; ?>">Status</a>
+        </div>
         <div style="clear:both"></div>
         <hr />
         <div>
             <form id="srch" enctype="application/x-www-form-urlencoded" method="post">
             <label>Search
             <input type="text" name="q" /></label><br>
-            <strong>Or</strong><br>
+            <!--<strong>Or</strong><br>
             <label>Find an Artist?
             <input type="text" name="artist" /></label>
             <label>Find an Album?
-            <input type="text" name="album" /></label>
+            <input type="text" name="album" /></label>-->
             <br/>
             </form>
             <button onClick="doSubmit();" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Search</span></button>
@@ -134,15 +173,19 @@ if(class_exists(CONFIG)){
             <div id="results">
             <?php
                 if($response === true){
+<<<<<<< Updated upstream
                     /*echo implode("<br>",$results);*/
+=======
+					
+>>>>>>> Stashed changes
 					$i=0;
                    foreach ($results as $item): ?>
-                        <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$NTYSCRIPT; ?>">
+                        <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" >
                         	<input type="hidden" name="name" value="<?php echo $item->getTitle(); ?>" />
                             <input type="hidden" name="link" value="<?php echo $item->getLink(); ?>" /> 
                             <input type="hidden" name="method" value="sabnzbd" /> 
-			    <?php echo "<a href=\"".$item->getLink()."\" ><h3>".$item->getTitle() . "</h3></a> <strong>Grabs: ".$item->getGrabs();?>
-                			<input type="submit" value="Send" />
+			    			<a href="<?php echo $item->getLink(); ?>" ><h3><?php echo $item->getTitle(); ?></h3></a> <strong>Grabs: <?php echo $item->getGrabs();?></strong>
+                			<input type="button" onClick="ajaxSend('result<?php echo $i; ?>')" value="Send" />
                             <br />
                         </form>
                         <?php
@@ -191,11 +234,7 @@ if(class_exists(CONFIG)){
 		});
   </script>
 <?php }
-	unset($_SESSION['q']);
 	unset($_SESSION['response']);
-	unset($_SESSION);
-	session_destroy();
-	session_unset();
 	exit;
 	?>
 </div>
