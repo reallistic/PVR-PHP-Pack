@@ -12,6 +12,13 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, pre, 
 /***** CUSTOM FONT *****/
 
 @font-face {
+	font-family: "arilons";
+	src: url('arilons.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
 	font-family: "Logobloqo2";
 	src: url('Logobloqo2.ttf') format('truetype');
 	font-weight: normal;
@@ -80,9 +87,9 @@ a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 	box-shadow: 0px 0px 18px 1px #888888;
 	text-align:center;
 	background-color:#EAEAEA;
-	font-size:30px;
-	font-weight:bold;
-	font-family:"Janda", Arial;
+	font-size:55px;
+	font-weight:normal;
+	font-family:"arilons", Arial;
 	height: 45px;
 	line-height:45px;
 	/* fallback */
@@ -134,4 +141,68 @@ a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 }
 .log_error{
 	border:1px solid #C00;
+}
+.result{
+	border-radius:5px;
+	background-color:#DDD;
+	float:left;
+	position:relative;
+	width:430px;
+	margin-bottom:10px;
+	margin-left:5px;
+	margin-right:5px;
+}
+
+.resultData{
+	position:relative;
+	width:430px;
+	height:320px;
+	overflow:auto;
+	margin-left:5px;
+}
+.resultData div{
+	width:95px;
+	margin:3px;
+	height:150px;
+	border:1px solid #fff;
+	float:left;
+	position:relative;
+}
+.resultData div img{
+	width:95px;
+	height:auto;
+	max-height:120px;
+	max-width:95px;
+}
+
+.resultImg{
+	position: relative;
+}
+.resultImg img{
+	width:150px;
+	height:auto;
+	max-height:120px;
+	max-width:150px;
+}
+div.addBtn{
+	position:absolute;
+	top:0px;
+	width:100%;
+	opacity:0;
+	-moz-opacity:0;
+	-webkit-opacity:0;
+	filter:Alpha(opacity=0%);
+	text-align:center;
+	border:none;
+	height:100%;
+}
+div.addBtn input{
+	margin:auto 0px;
+	vertical-align:middle;
+}
+div.addBtn:hover{
+	opacity:1;
+	-moz-opacity:1;
+	-webkit-opacity:1;
+	filter:Alpha(opacity=100%);
 }

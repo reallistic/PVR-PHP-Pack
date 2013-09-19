@@ -29,32 +29,76 @@ if(class_exists(CONFIG)){
 	}
 	
 	if($query === true){
-		/*require "lib/lastfm/lastfm.api.php";
+		require "lib/lastfm/lastfm.api.php";
 					 
 		// set api key				
 		CallerFactory::getDefaultCaller()->setApiKey("24e80eb914d9be7c19392358d24a39dc");
 					 
-		// search for the Coldplay band
-		$artistName = $q['artist'];
-		$limit = 1;
-		$results = Artist::search($artistName, $limit);		
-		while ($artist = $results->current()) {
-			echo "<div>";
-			echo "<h3>" . $artist->getName() . "</h3>";
-			echo "<a href=\"" . $artist->getUrl() . "\" >LastFm - " .$artist->getName()."</a><br>";
-			//echo '<img src="' . $artist->getImage(4) . '">';
-			$albums = Artist::getTopAlbums($artist->getName());
-			echo "<ul>";
-			foreach ($albums as $album){
+		// search for an artist
+		$lastfmRes = array();
+		if($q["artist"] != "" && $q["album"] == ""){
+			$results = Artist::search($q['artist'], 5);
+			
+			while ($artist = $results->current()) {
+				
+				$lfmr = new LASTFMRESULT($artist->getName());
+				$lfmr->setUrl($artist->getUrl());
+				$lfmr->setArtistImg($artist->getImage(4));
+				$albums = Artist::getTopAlbums($artist->getName());
+				$lfmr->setName($artist->getName());
+				/*echo "<div>";
+				echo "<h3>" . $artist->getName() . "</h3>";
+				echo "<a href=\"" . $artist->getUrl() . "\" >LastFm - " .$artist->getName()."</a><br>";
+				//echo '<img src="' . $artist->getImage(4) . '">';				
+				echo "<ul>";*/
+				foreach ($albums as $album){
+					$lfmr->addAlbum($album->getName(), false, $album->getImage(4));
+					//echo "<li>".$album->getName()."</li>";
+				}
+				/*echo "</ul>";
+				echo "</div>";*/
+				if(count($albums) >0){
+			 		array_push($lastfmRes, $lfmr);
+				}
+				$artist = $results->next();
+			}	
+		}
+		else if($q["album"] != "" && $q["artist"] == ""){
+			$results = Album::search($q["album"], 5);
+			while ($album = $results->current()) {
+				$lfmr = new LASTFMRESULT($album->getArtist());
+				$lfmr->addAlbum($album->getName(), false, $album->getImage(4));
+				$artist = Artist::getInfo($album->getArtist());
+				$lfmr->setArtistImg($artist->getImage(4));
+				$lfmr->setUrl($album->getUrl());
+				$lfmr->setName($album->getName());
+				array_push($lastfmRes, $lfmr);
+				
+				
+				/*echo "<div>";
+				echo "<h3>" . $album->getArtist() . "</h3>";
+				echo "<a href=\"" . $album->getUrl() . "\" >LastFm - " .$album->getName()."</a><br>";			
+				//echo '<img src="' . $artist->getImage(4) . '">';
+				echo "<ul>";
 				echo "<li>".$album->getName()."</li>";
+				echo "</ul>";
+				echo "</div>";*/
+			 	
+				$album = $results->next();
 			}
-			echo "</ul>";
-			echo "</div>";
-		 
-			$artist = $results->next();
-		}*/
-		if($indexers === true && $indexersprop === true){
-			$results = array();
+		}
+		else{
+			$album = Album::getInfo($q["artist"],$q["album"]);
+			$lfmr = new LASTFMRESULT($album->getArtist());
+			$lfmr->addAlbum($album->getName(), false, $album->getImage(4));
+			$lfmr->setUrl($album->getUrl());
+			$lfmr->setName($album->getName());
+			$artist = Artist::getInfo($album->getArtist());
+			$lfmr->setArtistImg($artist->getImage(4));
+			array_push($lastfmRes, $lfmr);
+		}
+		$results = array();
+		if(false & $indexers === true && $indexersprop === true){			
 			$filter=array();
 			$curls=array();
 			for( $i=0; $i<count($indexsites); $i++){
@@ -133,6 +177,9 @@ if(class_exists(CONFIG)){
 			}
 		});
 	}
+	function ajaxSendEmail(artist, album){
+		//define your send email function here
+	}
 </script>
 </head>
 
@@ -159,11 +206,11 @@ if(class_exists(CONFIG)){
             <form id="srch" enctype="application/x-www-form-urlencoded" method="post">
             <label>Search
             <input type="text" name="q" /></label><br>
-            <!--<strong>Or</strong><br>
+            <strong>Or</strong><br>
             <label>Find an Artist?
             <input type="text" name="artist" /></label>
             <label>Find an Album?
-            <input type="text" name="album" /></label>-->
+            <input type="text" name="album" /></label>-
             <br/>
             </form>
             <button onClick="doSubmit();" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Search</span></button>
@@ -188,6 +235,30 @@ if(class_exists(CONFIG)){
 						$i++;
                    endforeach;
                 }
+				elseif($query === true && count($lastfmRes) >0){
+					$i =0;
+					foreach($lastfmRes as $album){
+						echo "<div class=\"result\">";
+							echo "<h3>" ."<a target=\"new\" href=\"" . $album->getUrl() . "/+Albums\" >". $album->getArtist()." - All Albums</a>". "</h3>";
+							echo '<div style="clear:both"></div>';
+							echo '<div class="resultImg"><img src="' . $album->getArtistImg() . '"></div>';
+							echo "<div class=\"resultData\">";
+								$albums = $album->getAlbums();
+								$k=0;
+								
+								foreach ($albums as $alb){
+									echo "<div>";
+									echo '<div class="addBtn"><input type="button" onClick="ajaxSendEmail(\''. $album->getArtist().','. $alb .'\')" value="Send" /></div>';
+									echo "<img src=\"".$album->getAlbumsArt($k)."\" />".$alb."</div>";
+									$k++;
+								}
+							echo "</div>";
+							
+						echo "</div>";
+						$i++;
+					}
+					echo '<div style="clear:both"></div>';
+				}
                 elseif($query === false){
                     echo "<h3>Enter values above and click search</h3>";
                 }
