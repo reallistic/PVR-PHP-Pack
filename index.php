@@ -29,7 +29,31 @@ if(class_exists(CONFIG)){
 	}
 	
 	if($query === true){
-		if($indexers === true && $indexersprop === true){
+		require "lib/lastfm/lastfm.api.php";
+					 
+		// set api key				
+		CallerFactory::getDefaultCaller()->setApiKey("24e80eb914d9be7c19392358d24a39dc");
+					 
+		// search for the Coldplay band
+		$artistName = $q['artist'];
+		$limit = 1;
+		$results = Artist::search($artistName, $limit);		
+		while ($artist = $results->current()) {
+			echo "<div>";
+			echo "<h3>" . $artist->getName() . "</h3>";
+			echo "<a href=\"" . $artist->getUrl() . "\" >LastFm - " .$artist->getName()."</a><br>";
+			/*echo '<img src="' . $artist->getImage(4) . '">';*/
+			$albums = Artist::getTopAlbums($artist->getName());
+			echo "<ul>";
+			foreach ($albums as $album){
+				echo "<li>".$album->getName()."</li>";
+			}
+			echo "</ul>";
+			echo "</div>";
+		 
+			$artist = $results->next();
+		}
+		if($results && $indexers === true && $indexersprop === true){
 			$results = array();
 			$filter=array();
 			$curls=array();
@@ -134,28 +158,7 @@ if(class_exists(CONFIG)){
             <div id="results">
             <?php
                 if($response === true){
-					require "lib/lastfm/lastfm.api.php";
-					 
-					// set api key
-					
-					CallerFactory::getDefaultCaller()->setApiKey("24e80eb914d9be7c19392358d24a39dc");
-					 
-					// search for the Coldplay band
-					$artistName = $q['artist'];
-					$limit = 1;
-					$results = Artist::search($artistName, $limit);
-					 
-					echo "<ul>";
-					while ($artist = $results->current()) {
-						echo "<li><div>";
-						echo "Artist URL: " . $artist->getUrl() . "<br>";
-						echo '<img src="' . $artist->getImage(4) . '">';
-						echo "</div></li>";
-					 
-						$artist = $results->next();
-					}
-					echo "</ul>";
-                    /*
+					/*
 					$i=0;
                    foreach ($results as $item): ?>
                         <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$NTYSCRIPT; ?>">
