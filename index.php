@@ -20,7 +20,7 @@ if(class_exists(CONFIG)){
 				'album'=> CONFIG::escape_query($_REQUEST['album']),
 				'artist'=> CONFIG::escape_query($_REQUEST['artist'])
 		);
-		LOG::info(__FILE__." Line[".__LINE__."]"."searching for artist/album ".var_export($q));
+		LOG::info(__FILE__." Line[".__LINE__."]"."searching for artist/album ".$q["artist"]."/".$q["album"]);
 	}
 	elseif(isset($_REQUEST['q']) && $_REQUEST['q'] != ""){
 		$query = true;
@@ -173,11 +173,7 @@ if(class_exists(CONFIG)){
             <div id="results">
             <?php
                 if($response === true){
-<<<<<<< Updated upstream
                     /*echo implode("<br>",$results);*/
-=======
-					
->>>>>>> Stashed changes
 					$i=0;
                    foreach ($results as $item): ?>
                         <form id="result<?php echo $i; ?>" enctype="application/x-www-form-urlencoded" method="post" >
