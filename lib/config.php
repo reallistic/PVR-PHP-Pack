@@ -18,6 +18,7 @@ class CONFIG{
 	public static $LOGS = "log/";
 	public static $REQ = "";
 	public static $MGMT = "manage/";
+	public static $QUEUE = "queue/";
 	public static $CHSCRIPT = "changeconf.php";
 	public static $NTYSCRIPT = "notify.php";
 	public static $LGOUTSCRIPT = "logout.php";
@@ -83,6 +84,42 @@ class CONFIG{
 	
 	public function getSab(){
 		return $this->sab;
+	}
+	
+	public function getSabQueue(){
+		if($this->sab["https"] === true){
+			$url = "https://";
+		}
+		else{
+			$url = "http://";
+		}
+		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=queue&limit=200&output=xml&apikey=".$this->sab["apikey"];
+		LOG::info(__FILE__." Line[".__LINE__."]"."getting sab queue - ".$url);
+		$this->info= array(true, $url);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		$resp = curl_exec($ch);
+		curl_close($ch);
+		return $resp;
+	}
+	
+	public function getSabHistory(){
+		if($this->sab["https"] === true){
+			$url = "https://";
+		}
+		else{
+			$url = "http://";
+		}
+		$url .= $this->sab["server"].":".$this->sab["port"]."/sabnzbd/api?mode=history&output=xml&limit=200&apikey=".$this->sab["apikey"];
+		LOG::info(__FILE__." Line[".__LINE__."]"."getting sab history - ".$url);
+		$this->info= array(true, $url);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		$resp = curl_exec($ch);
+		curl_close($ch);
+		return $resp;
 	}
 	
 	public function sendToSab($l, $n){
