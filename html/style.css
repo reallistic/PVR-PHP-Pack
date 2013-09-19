@@ -161,28 +161,28 @@ a.button, button, input[type="button"],input[type="submit"],.ui-button-text{
 	margin-left:5px;
 }
 .resultData div{
-	width:95px;
-	margin:3px;
+	width:75px;
+	margin:2.5px;
 	height:150px;
 	border:1px solid #fff;
 	float:left;
 	position:relative;
 }
 .resultData div img{
-	width:95px;
+	width:75px;
 	height:auto;
 	max-height:120px;
-	max-width:95px;
+	max-width:75px;
 }
 
 .resultImg{
 	position: relative;
 }
 .resultImg img{
-	width:150px;
+	width:100px;
 	height:auto;
 	max-height:120px;
-	max-width:150px;
+	max-width:100px;
 }
 div.addBtn{
 	position:absolute;

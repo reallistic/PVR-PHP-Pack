@@ -204,13 +204,11 @@ if(class_exists(CONFIG)){
         <hr />
         <div>
             <form id="srch" enctype="application/x-www-form-urlencoded" method="post">
-            <label>Search
-            <input type="text" name="q" /></label><br>
-            <strong>Or</strong><br>
             <label>Find an Artist?
             <input type="text" name="artist" /></label>
+            and/or
             <label>Find an Album?
-            <input type="text" name="album" /></label>-
+            <input type="text" name="album" /></label>
             <br/>
             </form>
             <button onClick="doSubmit();" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Search</span></button>
