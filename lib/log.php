@@ -64,6 +64,7 @@ class LOG{
 				//self::info(__FILE__." Line[".__LINE__."]"." found file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
 				$filecont = file_get_contents($sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
 				$logs = array_merge($logs,explode("\r\n",$filecont));
+				$logs = array_reverse($logs);
 			}	
 			/*for($i =1; $i<CONFIG::$LOGSTOKEEP; $i++){
 				//self::info(__FILE__." Line[".__LINE__."]"." looking for file ".$sroot.CONFIG::$LOGS.LOG::$LOGFILENAME.$i);
