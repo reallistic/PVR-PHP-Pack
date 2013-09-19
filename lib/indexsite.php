@@ -62,7 +62,9 @@ class INDEXSITE{
 			array_push($c);
 		}
 	}
-	
+	public function setCat($c){
+		$this->category = explode(",",$c);
+	}
 	public function removeCat($c){
 		if(in_array($c, $this->category, true) === false){
 			return false;
@@ -75,7 +77,7 @@ class INDEXSITE{
 	public function makeSearch($q){
 		global $fnm;
 		
-		$cats = implode(', ', $this->category);
+		$cats = implode(',', $this->category);
 		if(is_array($q)){
 			$alb="";
 			$art="";
@@ -140,14 +142,15 @@ class INDEXSITE{
 				$indexsite = $inxs[$i];
 				if(!$this->isEqual($indexsite)){
 					array_push($savedsites,$indexsite);
-					array_push($response, "Found non- matching indexsite:");
+				}
+				elseif($this->isEqual($indexsite)){
+					//found site, skip it
+					array_push($response, "Found matching indexsite:");
 					array_push($response, "-id ".$this->id." ".$indexsite->getId());
 					array_push($response, "-name ".$this->name." ".$indexsite->getName());
 					array_push($response, "-url ".$this->url." ".$indexsite->getUrl());
 					array_push($response, "-apikey ".$this->apikey." ".$indexsite->getApiKey());
-				}
-				elseif($this->isEqual($indexsite)){
-					//found site, skip it
+					array_push($response, "-cat ".$this->getCat()." ".$indexsite->getCat());
 					array_push($response, "Found indexsite skipping");
 				}
 				elseif(!$indexsite instanceof INDEXSITE){
@@ -160,7 +163,7 @@ class INDEXSITE{
 			}
 			
 			if(count($inxs)>0 && count($savedsites) >0  && count($inxs) != count($savedsites)) {
-				$fp = fopen("indexsites.db", 'w+');
+				$fp = fopen($sroot.CONFIG::$DBS.INDEXSITE::$dbfile, 'w+');
 				if(flock($fp, LOCK_EX)){
 					fwrite($fp, serialize($savedsites));
 					flock($fp, LOCK_UN);
@@ -193,7 +196,7 @@ class INDEXSITE{
 	
 	public function isEqual($obj){
 		if($obj instanceof INDEXSITE){
-			return ($this->apikey === $obj->getApiKey() && $this->id === $obj->getId() && $this->name === $obj->getName() && $this->url === $obj->getUrl());
+			return ($this->apikey === $obj->getApiKey() && $this->id === $obj->getId() && $this->name === $obj->getName() && $this->url === $obj->getUrl() && $this->getCat() == $obj->getCat());
 		}
 		
 		return false;
@@ -216,7 +219,7 @@ class INDEXSITE{
 	}
 	
 	public function getCat(){
-		return $this->category;
+		return implode(",",$this->category);
 	}
 	
 	public function getId(){

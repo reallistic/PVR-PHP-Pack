@@ -34,6 +34,7 @@ if(class_exists(CONFIG)){
 					if($mthd == "add"){
 						//check if added indexsite already exists
 						$is = new INDEXSITE($n, $a, $u, $ind, $enabled);
+						$is->setCat($category);
 						$is->saveSite();
 						LOG::info(__FILE__." Line[".__LINE__."]"." Added index site $n");
 					}
@@ -52,6 +53,7 @@ if(class_exists(CONFIG)){
 						if($is instanceof INDEXSITE){
 							$_SESSION['response']=$is->delSite();
 							$is = new INDEXSITE($n, $a, $u, $ind, $enabled);
+							$is->setCat($category);
 							$is->saveSite();
 							LOG::info(__FILE__." Line[".__LINE__."]"." Changed index site $n with id $ind");
 						}

@@ -162,6 +162,12 @@
                         </td>
                     </tr>
                     <tr>
+                    	<td>
+                        <strong>Category:</strong>
+                        <input type="text" name="cat" value="<?php echo $inx->getCat(); ?>" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                         <input type="submit" value="save" />
                        
@@ -202,6 +208,12 @@
                 <td>
                 <strong>ApiKey:</strong>
                 <input type="text" name="apikey" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <strong>Category:</strong>
+                <input type="text" name="cat" value="3010" />
                 </td>
             </tr>
             <tr>
