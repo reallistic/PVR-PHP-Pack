@@ -28,6 +28,9 @@ if(class_exists(CONFIG)){
 			$https = (CONFIG::escape_query($_POST['https']) == "true");
 			$enabled = (CONFIG::escape_query($_POST['enabled']) == "true");
 			$category = CONFIG::escape_query($_POST['cat']);
+			$to = CONFIG::escape_query($_POST['to']);
+			$from = CONFIG::escape_query($_POST['from']);
+			$sub = CONFIG::escape_query($_POST['subject']);
 			$error = false;
 			switch($t){
 				case "indexsite":
@@ -81,6 +84,25 @@ if(class_exists(CONFIG)){
 						$conf = new CONFIG;
 						$conf->saveSabConfig($s);
 						LOG::info(__FILE__." Line[".__LINE__."]"." Changed sabnzbd config");
+					}
+					else{
+						LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");
+						$url = $root.CONFIG::$SCRIPTS.CONFIG::$LGOUTSCRIPT;
+						header("location: $url");
+
+					}
+				break;
+				case "email":
+					if($mthd == "edit"){						
+						$s = array(
+							"enabled"=>$enabled,
+							"to"=>$to,
+							"from"=>$from,
+							"subject"=>$sub
+						);
+						$conf = new CONFIG;
+						$conf->saveMailConfig($s);
+						LOG::info(__FILE__." Line[".__LINE__."]"." Changed email config");
 					}
 					else{
 						LOG::error(__FILE__." Line[".__LINE__."]"." SCRIPT attempt to access a script without proper post");

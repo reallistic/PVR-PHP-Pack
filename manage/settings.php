@@ -90,33 +90,31 @@
         <br />
         <h4>Email Notification</h4>
         <form method="post" action="<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$CHSCRIPT; ?>" enctype="multipart/form-data">
-        <input type="hidden" name="t" value="emailnotification" />
+        <input type="hidden" name="t" value="email" />
         <input type="hidden" name="method" value="edit" />
         <table>
         	<tr>
             	<td>
                 <strong>Enabled: </strong>
-                <input name="enabled" type="checkbox" <?php if($conf->email['enabled']) echo "checked"; ?> value="true" />
+                <input name="enabled" type="checkbox" <?php if($email['enabled']) echo "checked"; ?> value="true" />
                 </td>
             </tr>
             <tr>
             	<td>
                 <strong>Recieving address:</strong>
-                <input type="text" name="email" value="<?php echo $conf->email['address']; ?>" />
+                <input type="text" name="to" value="<?php echo $email['to']; ?>" />
                 </td>
                 <td>
-                <strong>Use smtp:</strong>
-                <input name="https" type="checkbox" <?php if($conf->email['smtp']) echo "checked"; ?> value="true" />
+                <strong>Sending address:</strong>
+                <input name="from" type="text" value="<?php echo $email['from']; ?>" />
                 </td>
             </tr>
             <tr>
             	<td>
-                <strong>SMTP server:</strong>
-                <input type="text" name="url" value="<?php echo $conf->email['smtpserver']; ?>" />
+                <strong>Subject:</strong>
+                <input type="text" name="subject" value="<?php echo $email['subject']; ?>" />
                 </td>
                 <td>
-                <strong>SMTP port:</strong>
-                <input type="text" name="port" value="<?php echo $conf->email['smtpport']; ?>" />
                 </td>
             </tr>
             <tr>

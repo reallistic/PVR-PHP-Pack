@@ -39,7 +39,8 @@ if(class_exists(CONFIG)){
 			}
 			
 			$conf = new CONFIG;
-			$sab = $conf->getSab();			
+			$sab = $conf->getSab();
+			$email = $conf->getEmail();
 			$error = false;
 		}
 	}

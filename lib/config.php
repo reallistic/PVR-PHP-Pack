@@ -8,6 +8,12 @@ class CONFIG{
 		"enabled" => true,
 		"https" => false
 	);
+	private $email = array(
+		"enabled"=>false,
+		"to" => "admin@localhost",
+		"from" => "admin@localhost",
+		"subject" => "new request"
+	);
 	
 	public $info;
 	public static $dbfile = "config.db";
@@ -40,6 +46,11 @@ class CONFIG{
 				$this->sab["category"] = $s["category"];
 				$this->sab["enabled"] = $s["enabled"];
 				$this->sab["https"] = $s["https"];
+				$s= $conf->getEmail();
+				$this->email["enabled"] = $s["enabled"];
+				$this->email["to"] = $s["to"];
+				$this->email["from"] = $s["from"];
+				$this->email["subject"] = $s["subject"];
 				$this->info = array(true, "config loaded ");
 			}
 			else{
@@ -84,6 +95,9 @@ class CONFIG{
 	
 	public function getSab(){
 		return $this->sab;
+	}
+	public function getEmail(){
+		return $this->email;
 	}
 	
 	public function getSabQueue(){
@@ -140,6 +154,39 @@ class CONFIG{
 		return $resp;
 	}
 	
+	public function saveMailConfig($s){
+		global $sroot;
+		$this->email["enabled"] = $s["enabled"];
+		$this->email["to"] = $s["to"];
+		$this->email["from"] = $s["from"];
+		$this->email["subject"] = $s["subject"];
+		
+		$fp = fopen($sroot.CONFIG::$DBS.CONFIG::$dbfile, 'w+');
+		if(flock($fp, LOCK_EX)) {
+			fwrite($fp, serialize($this));
+			flock($fp, LOCK_UN);
+			fclose($fp);
+			$this->info = array(true, "config saved for mail");
+			LOG::info(__FILE__." Line[".__LINE__."]"."config saved for mail");
+		}
+		else {
+			$this->info = array(false, "file cannot be locked");
+			LOG::error(__FILE__." Line[".__LINE__."]"."file cannot be locked");
+		}
+		$_SESSION['response'] = $this->info[1];
+	}
+	
+	public function sendToMail($a, $b){
+		LOG::info(__FILE__." Line[".__LINE__."]"." in send to mail");
+		$msg = "Request for:" ."\n";
+		$msg.= $a ."\n";
+		$msg.= $b ."\n";
+		$headers = 'From: '. $this->email["from"] . "\r\n";
+		LOG::info(__FILE__." Line[".__LINE__."]"."sending email to - ".$this->email["to"]. " msg: ".CONFIG::escape_query($msg));
+		$this->info= array(true, $url);
+		$resp = mail($this->email["to"], $this->email["subject"], $msg, $headers);
+		return $resp;
+	}
 	public static function escape_query($str) {
 		$str=htmlentities($str, ENT_QUOTES);
 		return strtr($str, array(

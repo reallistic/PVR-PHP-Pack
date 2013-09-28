@@ -177,8 +177,18 @@ if(class_exists(CONFIG)){
 			}
 		});
 	}
-	function ajaxSendEmail(artist, album){
+	function ajaxSendEmail(art, alb){
 		//define your send email function here
+		$.ajax({
+			url:"<?php echo $root.CONFIG::$SCRIPTS.CONFIG::$NTYSCRIPT; ?>",
+			data:{"artist":art,"album":alb, "method":"email"},
+			type:"POST",
+			complete: function(jqXHR, status){
+				$("#info").html(status);
+				$("#info").show();
+				$( "#info" ).dialog();
+			}
+		});
 	}
 </script>
 </head>
@@ -246,7 +256,7 @@ if(class_exists(CONFIG)){
 								
 								foreach ($albums as $alb){
 									echo "<div>";
-									echo '<div class="addBtn"><input type="button" onClick="ajaxSendEmail(\''. $album->getArtist().','. $alb .'\')" value="Send" /></div>';
+									echo '<div class="addBtn"><input type="button" onClick="ajaxSendEmail(\''. $album->getArtist().'\',\''. $alb .'\')" value="Send" /></div>';
 									echo "<img src=\"".$album->getAlbumsArt($k)."\" />".$alb."</div>";
 									$k++;
 								}
@@ -299,7 +309,7 @@ if(class_exists(CONFIG)){
 		});
   </script>
 <?php }
-	unset($_SESSION['response']);
+	//unset($_SESSION['response']);
 	exit;
 	?>
 </div>
